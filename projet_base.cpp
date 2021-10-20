@@ -145,9 +145,7 @@ int main (int argc, char *argv[]) {
     cvtColor(frame, frame_gray, CV_BGR2GRAY);
 
 	
-   // image smoothing by median blur
-   // 
- int n = 17;
+
  
  #ifdef PROFILE
  struct timeval start, end;
