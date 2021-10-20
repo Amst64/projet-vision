@@ -53,18 +53,36 @@ using std::cout;
  *--------------- MAIN FUNCTION ---------------
  *
  */
-int main () {
+int main (int argc, char *argv[]) {
 //----------------------------------------------
 // Video acquisition - opening
 //----------------------------------------------
   VideoCapture cap(0); // le numéro 0 indique le point d'accès à la caméra 0 => /dev/video0
   if(!cap.isOpened()){
-    cout << "Errore"; return -1;
+    cout << "Error"; return -1;
   
   }
-// HD resolution  1 920 × 1 080,
-  int rows = 240; // 480, 1080	
-  int cols = 320; // 640, 1920
+  
+  int rows,cols,n; 
+  // s'il y a plus d'une valeur on va laisser l'utilisateur choisir les valeurs 
+  if (argc>1){ // plus d'un argument l'utilisateur veut changer les valeurs
+    cout<<"L'utilisateur va changer les valeurs"<<endl; 
+    cout<<"La valeur pour le nombre de lignes : "<<endl;
+    cin>>rows; 
+    cout<<"La valeur pour le nombre de colonnes : "<<endl;
+    cin>>cols; 
+    cout<<"La valeur de n pour le filtre median : "<<endl; 
+    cin>>n; 
+  }
+  else {
+  // HD resolution  1 920 × 1 080,
+    rows = 240; // 480, 1080	
+    cols = 320; // 640, 1920
+  // image smoothing by median blur
+    
+    n = 17;
+  }
+
   cap.set(CAP_PROP_FRAME_WIDTH, cols);	 
   cap.set(CAP_PROP_FRAME_HEIGHT, rows);
 
