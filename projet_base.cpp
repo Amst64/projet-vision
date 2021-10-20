@@ -157,11 +157,11 @@ int main (int argc, char *argv[]) {
      medianBlur(frame_gray, frame1, n);
  #ifdef PROFILE
  gettimeofday(&end, NULL);
- double e = ((double) end.tv_sec * 1000000.0 + (double) end.tv_usec);
- double s = ((double) start.tv_sec * 1000000.0 + (double) start.tv_usec);
+ double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
+ double s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
 moy_median +=(e-s); // convertir en miliseconde pour ne pas dépasser la vleur des doubles et donc saturer les valeurs 
 n_median++;
- printf("Mediane : %lf\n", n, (e - s));
+ printf("Mediane : %lf ms\n", n, (e - s));
 
  #endif
 
@@ -185,11 +185,11 @@ n_median++;
  
 #ifdef PROFILE
  gettimeofday(&end, NULL);
- e = ((double) end.tv_sec * 1000000.0 + (double) end.tv_usec);
- s = ((double) start.tv_sec * 1000000.0 + (double) start.tv_usec);
+ e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
+ s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
  moy_sobel += (e-s); 
  n_sobel++; 
- printf("Sobel : %lf\n", (e - s));
+ printf("Sobel : %lf ms \n", (e - s));
 
  #endif
 
