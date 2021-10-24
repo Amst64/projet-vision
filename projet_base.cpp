@@ -138,79 +138,79 @@ int main (int argc, char *argv[]) {
 // boucle infinie pour traiter la séquence vidéo  
 //
   while(key!='q'){
-  //	  
-  // acquisition d'une trame video - librairie OpenCV
-    cap.read(frame);
-  //conversion en niveau de gris - librairie OpenCV
-    cvtColor(frame, frame_gray, CV_BGR2GRAY);
-
-	
-
- 
- #ifdef PROFILE
- struct timeval start, end;
- gettimeofday(&start, NULL);
- #endif
-     	
-    // ------------------------------------------------
-    // calcul de la mediane - librairie OpenCV
-     medianBlur(frame_gray, frame1, n);
- #ifdef PROFILE
- gettimeofday(&end, NULL);
- double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
- double s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
-moy_median +=(e-s); // convertir en miliseconde pour ne pas dépasser la vleur des doubles et donc saturer les valeurs 
-n_median++;
- printf("Mediane : %lf ms\n", n, (e - s));
-
- #endif
-
-#ifdef PROFILE
-// struct timeval start, end;
- gettimeofday(&start, NULL);
- #endif  
- 
-    // ------------------------------------------------
-    // calcul du gradient- librairie OpenCV
-    /// Gradient Y
-    Sobel( frame1, grad_x, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT );
-	/// absolute value
-    convertScaleAbs( grad_x, abs_grad_x );
-    /// Gradient Y
-    Sobel( frame1, grad_y, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );
-	/// absolute value
-    convertScaleAbs( grad_y, abs_grad_y );
-    /// Total Gradient (approximate)
-    addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad ); 	
- 
-#ifdef PROFILE
- gettimeofday(&end, NULL);
- e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
- s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
- moy_sobel += (e-s); 
- n_sobel++; 
- printf("Sobel : %lf ms \n", (e - s));
-
- #endif
-
+    //	  
+    // acquisition d'une trame video - librairie OpenCV
+      cap.read(frame);
+    //conversion en niveau de gris - librairie OpenCV
+      cvtColor(frame, frame_gray, CV_BGR2GRAY);
 
     
-    
-    // -------------------------------------------------
-    // visualisation
-    // taille d'image réduite pour meuilleure disposition sur écran
-    //    resize(frame, frame, Size(), 0.5, 0.5);
-    //    resize(frame_gray, frame_gray, Size(), 0.5, 0.5);
-    //    resize(grad, grad, Size(), 0.5, 0.5);
-    imshow("Video input",frame);
-    imshow("Video gray levels",frame_gray);
-    imshow("Video Mediane",frame1);    
-    imshow("Video Edge detection",grad);  
-    
-    
-    key=waitKey(5);
+
+  
+  #ifdef PROFILE
+  struct timeval start, end;
+  gettimeofday(&start, NULL);
+  #endif
+        
+      // ------------------------------------------------
+      // calcul de la mediane - librairie OpenCV
+      medianBlur(frame_gray, frame1, n);
+  #ifdef PROFILE
+  gettimeofday(&end, NULL);
+  double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
+  double s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
+  moy_median +=(e-s); // convertir en miliseconde pour ne pas dépasser la vleur des doubles et donc saturer les valeurs 
+  n_median++;
+  printf("Mediane : %lf ms\n", n, (e - s));
+
+  #endif
+
+  #ifdef PROFILE
+  // struct timeval start, end;
+  gettimeofday(&start, NULL);
+  #endif  
+  
+      // ------------------------------------------------
+      // calcul du gradient- librairie OpenCV
+      /// Gradient Y
+      Sobel( frame1, grad_x, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT );
+    /// absolute value
+      convertScaleAbs( grad_x, abs_grad_x );
+      /// Gradient Y
+      Sobel( frame1, grad_y, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );
+    /// absolute value
+      convertScaleAbs( grad_y, abs_grad_y );
+      /// Total Gradient (approximate)
+      addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad ); 	
+  
+  #ifdef PROFILE
+  gettimeofday(&end, NULL);
+  e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
+  s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
+  moy_sobel += (e-s); 
+  n_sobel++; 
+  printf("Sobel : %lf ms \n", (e - s));
+
+  #endif
+
+
+      
+      
+      // -------------------------------------------------
+      // visualisation
+      // taille d'image réduite pour meuilleure disposition sur écran
+      //    resize(frame, frame, Size(), 0.5, 0.5);
+      //    resize(frame_gray, frame_gray, Size(), 0.5, 0.5);
+      //    resize(grad, grad, Size(), 0.5, 0.5);
+      imshow("Video input",frame);
+      imshow("Video gray levels",frame_gray);
+      imshow("Video Mediane",frame1);    
+      imshow("Video Edge detection",grad);  
+      
+      
+      key=waitKey(5);
   }
-cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
-cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
+  cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
+  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
 }
 
