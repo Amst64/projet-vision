@@ -3,3 +3,5 @@ temp.cpp
 a.out 
 temp/
 .vscode 
+projet 
+*.pbm
