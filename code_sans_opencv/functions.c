@@ -11,9 +11,9 @@
 // ONLY FOR PGN IMAGES type P2 !!!
 //------------------------------------------------------------------
 //open image file and access data, allocate an image with file data; 
-float * readimg(char *filename, int *rs, int *cs, int *vs)
+int * readimg(char *filename, int *rs, int *cs, int *vs)
 {
-  float *im; // input data
+  int *im; // input data
   char *rd;
   int c,v;
   int rw; //row size
@@ -58,7 +58,7 @@ float * readimg(char *filename, int *rs, int *cs, int *vs)
   // scan maximal pixel value, should be == 255
   c = sscanf(buffer, "%d", &v);
   //data allocation and initialization
-  im = (float *) calloc (rw*cl,sizeof(float));
+  im = (int *) calloc (rw*cl,sizeof(int));
   if (im==NULL)
     {
       fprintf(stderr, "Data allocation (failed %d) bytes)\n", rw*cl);
@@ -70,7 +70,7 @@ float * readimg(char *filename, int *rs, int *cs, int *vs)
   for (i=0;i<N;i++)
     {
       fscanf(fd, "%d", &c);
-      im[i]=(float) c;
+      im[i]=(int) c;
     }
   // close file and return pointer to the iamge data
   fclose(fd);  
@@ -85,7 +85,7 @@ float * readimg(char *filename, int *rs, int *cs, int *vs)
 //------------------------------------------------------------------
 // write image in a file
 //----------------------------------------------------------------
-void writeimg(char *filename, float *im, int rs, int cs, int vs)
+void writeimg(char *filename, int *im, int rs, int cs, int vs)
 {
   int cl;
   int rw;

@@ -48,9 +48,9 @@ int main (int argc, char *argv[])
   char *file_out=argv[2];
 
   // exemples des pointeurs vers les matrices reprÃ©sentant les images
-  float *T;
-  float *Grad;
-  float *Grad_median;
+  int *T;
+  int *Grad;
+  int *Grad_median;
 
   // dimension de matrice, valeur maximale
   int v;  // max  value in matrix
@@ -68,8 +68,8 @@ int main (int argc, char *argv[])
   // OPEN DATA FILE AND ALLOCATE INPUT IMAGE MEMORY (float precision)
   //-------------------------------------------------------------
   T = readimg(filename, &rw, &cl, &v);
-  Grad = (float *) calloc (rw*cl,sizeof(float));
-  Grad_median = (float *) calloc ((rw+(2*k))*(cl+(2*k)),sizeof(float));
+  Grad = (int *) calloc (rw*cl,sizeof(int));
+  Grad_median = (int *) calloc ((rw+(2*k))*(cl+(2*k)),sizeof(int));
  
 //----------------------------------------------------------------
 // FILTRE MEDIAN 

@@ -20,7 +20,7 @@ typedef unsigned char uint8;
 #define BSIZE 1000
 
 // function declarations
-float * readimg(char *, int *, int *, int *);
-void writeimg(char *, float *, int , int, int);
+int * readimg(char *, int *, int *, int *);
+void writeimg(char *, int *, int , int, int);
 
 #endif
