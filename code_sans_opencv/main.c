@@ -36,6 +36,14 @@ void selectionSort(int arr[], int n)
         swap(&arr[min_idx], &arr[i]);
     }
 }
+// Function to print an array
+void printArray(int arr[], int size)
+{
+    int i;
+    for (i = 0; i < size; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+}
 
 //-----------------------------------------------------------
 // MAIN FUNCTION
@@ -56,7 +64,7 @@ int main (int argc, char *argv[])
   int v;  // max  value in matrix
   int rw; // row size
   int cl; // column size
-  int k = 1; // La taille de la matrice à utiliser pour faire le filtrage
+  int k = 8; // La taille de la matrice à utiliser pour faire le filtrage
   // vÃ©rification des arguments d'entrÃ©e
   if (argc != 3)
     {  fprintf(stderr,"Input parameters missing:\n./program_name <inpout.pgm> <output.pgm>\n");
@@ -71,6 +79,32 @@ int main (int argc, char *argv[])
   Grad = (int *) calloc (rw*cl,sizeof(int));
   Grad_median = (int *) calloc ((rw+(2*k))*(cl+(2*k)),sizeof(int));
  
+for (int j = 1; j < rw-1; j++)
+	for (int i = 1; i< cl-1; i++)
+	{
+		//int n = T[i + (j-1)*rw];
+	    //int s = T[i + (j+1)*rw];
+		
+		int x = T[i + (j-1)*rw - 1] * (-1) + T[i + j*rw - 1] * (-2) + T[i + (j+1)*rw - 1] * (-1) + T[i + (j-1)*rw + 1] + T[i + j*rw + 1] * 2 + T[i + (j+1)*rw + 1];
+		if(x<0)
+		{
+			x=-x;
+		}
+		
+		int y = T[i + (j-1)*rw - 1] + T[i + (j-1)*rw] * 2 + T[i + (j-1)*rw + 1] + T[i + (j+1)*rw - 1] * (-1) + T[i + (j+1)*rw] * (-2) + T[i + (j+1)*rw + 1] * (-1);
+		if(y<0)
+		{
+			y=-y;
+		}
+		
+		Grad[i + j*rw] = (x+y)/2;
+
+	}
+
+
+
+
+
 //----------------------------------------------------------------
 // FILTRE MEDIAN 
 //---------------------------------------------------------------- 
@@ -78,7 +112,7 @@ int main (int argc, char *argv[])
 // copie de la matrice grad dans la matrice grad_median 
 for (int i = k; i<(rw + ( 2*k ) - k);i++){
     for (int j = k; j<(cl + ( 2*k ) - k);j++){
-        Grad_median[i*(cl+(2*k))+j] = Grad[(i-k)*cl+(j-k)]; 
+        Grad_median[i*(cl+(2*k))+j] = T[(i-k)*cl+(j-k)]; 
     }
 }
 
@@ -95,13 +129,22 @@ for (int i = k; i<(rw + ( 2*k ) - k);i++){
                 selectionSort(temp,n*n);
                 int median_value = temp[(int) (n*n)/2];
                 Grad[(i-k)*cl+(j-k)] = median_value;
+                ind_temp++;
+                // printf("%d",median_value);
+                // printf("\n");
+                // int taille = n*n;
+                // printf(temp,taille);
+                // printf("\n");
             }
         }
         // tri du array temp (d'abord tester en sortant la les vector dans le prgm median qui marche)
     }
 }
 
-
+    // printArray(Grad,rw*cl);
+//----------------------------------------------------------------
+// FIN FILTRE MEDIAN 
+//---------------------------------------------------------------- 
 
 
 
