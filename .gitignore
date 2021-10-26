@@ -5,5 +5,5 @@ temp/
 .vscode 
 projet 
 *.pbm
-*.sh
+test.sh
 *.txt
