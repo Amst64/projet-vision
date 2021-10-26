@@ -157,7 +157,7 @@ int main (int argc, char *argv[]) {
   double s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
   moy_median +=(e-s); // convertir en miliseconde pour ne pas dépasser la vleur des doubles et donc saturer les valeurs 
   n_median++;
-  printf("Mediane : %lf ms\n", n, (e - s));
+  //printf("Mediane : %lf ms\n", n, (e - s));
 
   #endif
 
@@ -185,7 +185,7 @@ int main (int argc, char *argv[]) {
   s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
   moy_sobel += (e-s); 
   n_sobel++; 
-  printf("Sobel : %lf ms \n", (e - s));
+  //printf("Sobel : %lf ms \n", (e - s));
 
   #endif
 
@@ -208,7 +208,7 @@ int main (int argc, char *argv[]) {
   }
   cout<<"======================================================================================================================================================="<<endl;
   cout<<"La valeur de n pour le filtre de median est "<<n<<endl;
-  cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<col<<endl;
+  cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<cols<<endl;
   cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
   cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
   cout<<"======================================================================================================================================================="<<endl;
