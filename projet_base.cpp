@@ -210,7 +210,11 @@ int main (int argc, char *argv[]) {
       
       key=waitKey(5);
   }
-  cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
-  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
+  cout<<"======================================================================================================================================================="<<endl;
+  cout<<"La valeur de n pour le filtre de median est "<<n<<endl;
+  cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<col<<endl;
+  cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<" avec comme résolution = rows = "<<rows << "et col "<<col<<endl;
+  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<" avec rows = "<<rows << "et col "<<col<<endl;
+  cout<<"======================================================================================================================================================="<<endl;
 }
 
