@@ -62,8 +62,8 @@ int main (int argc, char *argv[])
 
   // dimension de matrice, valeur maximale
   int v;  // max  value in matrix
-  int rw; // row size
-  int cl; // column size
+  int cl; // row size
+  int rw; // column size
   int k = 1; // La taille de la matrice à utiliser pour faire le filtrage
   // vÃ©rification des arguments d'entrÃ©e
   if (argc != 3)
@@ -75,29 +75,29 @@ int main (int argc, char *argv[])
   //-------------------------------------------------------------
   // OPEN DATA FILE AND ALLOCATE INPUT IMAGE MEMORY (float precision)
   //-------------------------------------------------------------
-  T = readimg(filename, &rw, &cl, &v);
-  Grad = (int *) calloc (rw*cl,sizeof(int));
-  Grad_median = (int *) calloc ((rw+(2*k))*(cl+(2*k)),sizeof(int));
+  T = readimg(filename, &cl, &rw, &v);
+  Grad = (int *) calloc (cl*rw,sizeof(int));
+  Grad_median = (int *) calloc ((cl+(2*k))*(rw+(2*k)),sizeof(int));
  
-// for (int j = 1; j < rw-1; j++)
-// 	for (int i = 1; i< cl-1; i++)
+// for (int j = 1; j < cl-1; j++)
+// 	for (int i = 1; i< rw-1; i++)
 // 	{
-// 		//int n = T[i + (j-1)*rw];
-// 	    //int s = T[i + (j+1)*rw];
+// 		//int n = T[i + (j-1)*cl];
+// 	    //int s = T[i + (j+1)*cl];
 		
-// 		int x = T[i + (j-1)*rw - 1] * (-1) + T[i + j*rw - 1] * (-2) + T[i + (j+1)*rw - 1] * (-1) + T[i + (j-1)*rw + 1] + T[i + j*rw + 1] * 2 + T[i + (j+1)*rw + 1];
+// 		int x = T[i + (j-1)*cl - 1] * (-1) + T[i + j*cl - 1] * (-2) + T[i + (j+1)*cl - 1] * (-1) + T[i + (j-1)*cl + 1] + T[i + j*cl + 1] * 2 + T[i + (j+1)*cl + 1];
 // 		if(x<0)
 // 		{
 // 			x=-x;
 // 		}
 		
-// 		int y = T[i + (j-1)*rw - 1] + T[i + (j-1)*rw] * 2 + T[i + (j-1)*rw + 1] + T[i + (j+1)*rw - 1] * (-1) + T[i + (j+1)*rw] * (-2) + T[i + (j+1)*rw + 1] * (-1);
+// 		int y = T[i + (j-1)*cl - 1] + T[i + (j-1)*cl] * 2 + T[i + (j-1)*cl + 1] + T[i + (j+1)*cl - 1] * (-1) + T[i + (j+1)*cl] * (-2) + T[i + (j+1)*cl + 1] * (-1);
 // 		if(y<0)
 // 		{
 // 			y=-y;
 // 		}
 		
-// 		Grad[i + j*rw] = (x+y)/2;
+// 		Grad[i + j*cl] = (x+y)/2;
 
 // 	}
 
@@ -110,25 +110,25 @@ int main (int argc, char *argv[])
 //---------------------------------------------------------------- 
 
 //copie de la matrice grad dans la matrice grad_median 
-for (int i = k; i<(rw + ( 2*k ) - k);i++){
-    for (int j = k; j<(cl + ( 2*k ) - k);j++){
-        Grad_median[i*(cl+(2*k))+j] = T[(i-k)*cl+(j-k)]; 
+for (int i = k; i<(cl + ( 2*k ) - k);i++){
+    for (int j = k; j<(rw + ( 2*k ) - k);j++){
+        Grad_median[i*(rw+(2*k))+j] = T[(i-k)*rw+(j-k)]; 
     }
 }
 
 int n = 2*(k-1) + 3; 
 // Parcours de la matrice pour réaliser le filtrage
-for (int i = k; i<(rw + ( 2*k ) - k);i++){
-    for (int j = k; j<(cl + ( 2*k ) - k);j++){
+for (int i = k; i<(cl + ( 2*k ) - k);i++){
+    for (int j = k; j<(rw + ( 2*k ) - k);j++){
         int temp[n*n];
         int ind_temp = 0;
         // ajout des valeurs obtenue par la matrice dans temp
         for( int ind_i = -k; ind_i < k+1;ind_i++){
             for( int ind_j = -k; ind_j<k+1; ind_j++){
-                temp[ind_temp] = Grad_median[(i+ind_i)*(cl+2*k)+(j+ind_j)];                
+                temp[ind_temp] = Grad_median[(i+ind_i)*(rw+2*k)+(j+ind_j)];                
                 selectionSort(temp,n*n);
                 int median_value = temp[(int) (n*n)/2];
-                Grad[(i-k)*cl+(j-k)] = median_value;
+                Grad[(i-k)*rw+(j-k)] = median_value;
                 ind_temp++;
                 // printf("%d",median_value);
                 // printf("\n");
@@ -141,7 +141,7 @@ for (int i = k; i<(rw + ( 2*k ) - k);i++){
     }
 }
 
-//     printArray(Grad,rw*cl);
+//     printArray(Grad,cl*rw);
 // ----------------------------------------------------------------
 // FIN FILTRE MEDIAN 
 // ---------------------------------------------------------------- 
@@ -155,7 +155,7 @@ for (int i = k; i<(rw + ( 2*k ) - k);i++){
   //-------------------------------------------------------------
   // WRITE RESULT IN A PGN IMAGE 
   //-------------------------------------------------------------
-   writeimg(file_out, Grad, rw, cl, v);
+   writeimg(file_out, Grad, cl, rw, v);
    free(Grad);
    free(Grad_median);
    free(T);
@@ -169,25 +169,25 @@ for (int i = k; i<(rw + ( 2*k ) - k);i++){
   // A COMPLETER :-)
   // exemple d'un traitement de base  
   //Sobel
-//   for (int j = 1; j < rw-1; j++)
-// 	for (int i = 1; i< cl-1; i++)
+//   for (int j = 1; j < cl-1; j++)
+// 	for (int i = 1; i< rw-1; i++)
 // 	{
-// 		//int n = T[i + (j-1)*rw];
-// 	    //int s = T[i + (j+1)*rw];
+// 		//int n = T[i + (j-1)*cl];
+// 	    //int s = T[i + (j+1)*cl];
 		
-// 		int x = T[i + (j-1)*rw - 1] * (-1) + T[i + j*rw - 1] * (-2) + T[i + (j+1)*rw - 1] * (-1) + T[i + (j-1)*rw + 1] + T[i + j*rw + 1] * 2 + T[i + (j+1)*rw + 1];
+// 		int x = T[i + (j-1)*cl - 1] * (-1) + T[i + j*cl - 1] * (-2) + T[i + (j+1)*cl - 1] * (-1) + T[i + (j-1)*cl + 1] + T[i + j*cl + 1] * 2 + T[i + (j+1)*cl + 1];
 // 		if(x<0)
 // 		{
 // 			x=-x;
 // 		}
 		
-// 		int y = T[i + (j-1)*rw - 1] + T[i + (j-1)*rw] * 2 + T[i + (j-1)*rw + 1] + T[i + (j+1)*rw - 1] * (-1) + T[i + (j+1)*rw] * (-2) + T[i + (j+1)*rw + 1] * (-1);
+// 		int y = T[i + (j-1)*cl - 1] + T[i + (j-1)*cl] * 2 + T[i + (j-1)*cl + 1] + T[i + (j+1)*cl - 1] * (-1) + T[i + (j+1)*cl] * (-2) + T[i + (j+1)*cl + 1] * (-1);
 // 		if(y<0)
 // 		{
 // 			y=-y;
 // 		}
 		
-// 		Grad[i + j*rw] = (x+y)/2;
+// 		Grad[i + j*cl] = (x+y)/2;
 
 // 	}
 // ---------------------------------------------------------------- 
