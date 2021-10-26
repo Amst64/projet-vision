@@ -66,13 +66,9 @@ int main (int argc, char *argv[]) {
   int rows,cols,n; 
   // s'il y a plus d'une valeur on va laisser l'utilisateur choisir les valeurs 
   if (argc>1){ // plus d'un argument l'utilisateur veut changer les valeurs
-    cout<<"L'utilisateur va changer les valeurs"<<endl; 
-    cout<<"La valeur pour le nombre de lignes : "<<endl;
-    cin>>rows; 
-    cout<<"La valeur pour le nombre de colonnes : "<<endl;
-    cin>>cols; 
-    cout<<"La valeur de n pour le filtre median : "<<endl; 
-    cin>>n; 
+    rows = stoi(argv[1]); // premier argument est la taille des lignes 
+    cols = stoi(argv[2]); // second argument est la taille des colonnes 
+    n = stoi(argv[3]); // troisième argument est la taille de la matrice median 
   }
   else {
   // HD resolution  1 920 × 1 080,
@@ -213,8 +209,8 @@ int main (int argc, char *argv[]) {
   cout<<"======================================================================================================================================================="<<endl;
   cout<<"La valeur de n pour le filtre de median est "<<n<<endl;
   cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<col<<endl;
-  cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<" avec comme résolution = rows = "<<rows << "et col "<<col<<endl;
-  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<" avec rows = "<<rows << "et col "<<col<<endl;
+  cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
+  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
   cout<<"======================================================================================================================================================="<<endl;
 }
 
