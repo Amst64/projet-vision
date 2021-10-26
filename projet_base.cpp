@@ -15,6 +15,7 @@
  */ 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* 
  * Libraries OpenCV "obligatoires" 
@@ -57,7 +58,7 @@ int main (int argc, char *argv[]) {
 //----------------------------------------------
 // Video acquisition - opening
 //----------------------------------------------
-  VideoCapture cap(0); // le numéro 0 indique le point d'accès à la caméra 0 => /dev/video0
+  VideoCapture cap(4); // le numéro 0 indique le point d'accès à la caméra 0 => /dev/video0
   if(!cap.isOpened()){
     cout << "Error"; return -1;
   
