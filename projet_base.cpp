@@ -21,7 +21,7 @@
  * Libraries OpenCV "obligatoires" 
  *
  */ 
-#include "highgui.h"
+#include "highgui.hpp"
 #include "cv.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
