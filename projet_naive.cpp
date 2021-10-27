@@ -225,7 +225,7 @@ int main (int argc, char *argv[]) {
           y=-y;
         }
         
-        Grad[i + j*rw] = (x+y)/2;
+        grad[i + j*rw] = (x+y)/2;
       }
     }
   
