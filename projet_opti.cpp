@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cmath> // module pour utiliser les valeurs absolue
 
 /* 
  * Libraries OpenCV "obligatoires" 
@@ -151,7 +152,10 @@ int main (int argc, char *argv[]) {
         
       // ------------------------------------------------
       // calcul de la mediane - librairie OpenCV
-      medianBlur(frame_gray, frame1, n);
+
+      // medianBlur(frame_gray, frame1, n);
+
+      // filtre median optimisée 
   #ifdef PROFILE
   gettimeofday(&end, NULL);
   double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
@@ -167,19 +171,28 @@ int main (int argc, char *argv[]) {
   gettimeofday(&start, NULL);
   #endif  
   
-      // ------------------------------------------------
-      // calcul du gradient- librairie OpenCV
-      /// Gradient Y
-      Sobel( frame1, grad_x, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT );
-    /// absolute value
-      convertScaleAbs( grad_x, abs_grad_x );
-      /// Gradient Y
-      Sobel( frame1, grad_y, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );
-    /// absolute value
-      convertScaleAbs( grad_y, abs_grad_y );
-      /// Total Gradient (approximate)
-      addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad ); 	
-  
+    //   // ------------------------------------------------
+    //   // calcul du gradient- librairie OpenCV
+    //   /// Gradient Y
+    //   Sobel( frame1, grad_x, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT );
+    // /// absolute value
+    //   convertScaleAbs( grad_x, abs_grad_x );
+    //   /// Gradient Y
+    //   Sobel( frame1, grad_y, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );
+    // /// absolute value
+    //   convertScaleAbs( grad_y, abs_grad_y );
+    //   /// Total Gradient (approximate)
+    //   addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad ); 	
+    
+
+    // filtre Sobel avec le déroulement de bouble
+    for (int j = 1;j<rows-2;j+=2){
+      for (int i =1;i<cols-2;i+=2){
+        grad[i + j*rw] = (abs(frame_gray[i + (j-1)*rw - 1] * (-1) + frame_gray[i + j*rw - 1] * (-2) + frame_gray[i + (j+1)*rw - 1] * (-1) + frame_gray[i + (j-1)*rw + 1] + frame_gray[i + j*rw + 1] * 2 + frame_gray[i + (j+1)*rw + 1])+abs(frame_gray[(i+1) + ((j+1)-1)*rw - 1] * (-1) + frame_gray[(i+1) + (j+1)*rw - 1] * (-2) + frame_gray[(i+1) + ((j+1)+1)*rw - 1] * (-1) + frame_gray[(i+1) + ((j+1)-1)*rw + 1] + frame_gray[(i+1) + (j+1)*rw + 1] * 2 + frame_gray[(i+1) + ((j+1)+1)*rw + 1]))/2;
+        grad[(i+1) + (j+1)*rw] = (abs(frame_gray[i + (j-1)*rw - 1] + frame_gray[i + (j-1)*rw] * 2 + frame_gray[i + (j-1)*rw + 1] + frame_gray[i + (j+1)*rw - 1] * (-1) + frame_gray[i + (j+1)*rw] * (-2) + frame_gray[i + (j+1)*rw + 1] * (-1))+abs(frame_gray[(i+1) + ((j+1)-1)*rw - 1] + frame_gray[(i+1) + ((j+1)-1)*rw] * 2 + frame_gray[(i+1) + ((j+1)-1)*rw + 1] + frame_gray[(i+1) + ((j+1)+1)*rw - 1] * (-1) + frame_gray[(i+1) + ((j+1)+1)*rw] * (-2) + frame_gray[(i+1) + ((j+1)+1)*rw + 1] * (-1)))
+      }
+    }
+
   #ifdef PROFILE
   gettimeofday(&end, NULL);
   e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
@@ -189,10 +202,7 @@ int main (int argc, char *argv[]) {
   //printf("Sobel : %lf ms \n", (e - s));
 
   #endif
-
-
-      
-      
+ 
       // -------------------------------------------------
       // visualisation
       // taille d'image réduite pour meuilleure disposition sur écran
@@ -203,7 +213,6 @@ int main (int argc, char *argv[]) {
       imshow("Video gray levels",frame_gray);
       imshow("Video Mediane",frame1);    
       imshow("Video Edge detection",grad);  
-      
       
       key=waitKey(5);
   }
