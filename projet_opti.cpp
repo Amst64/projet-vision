@@ -22,7 +22,7 @@
  * Libraries OpenCV "obligatoires" 
  *
  */ 
-#include "highgui.hpp"
+#include "highgui.h"
 #include "cv.h"
 #include "opencv2/opencv.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
