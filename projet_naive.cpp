@@ -158,7 +158,7 @@ int main (int argc, char *argv[]) {
 
       // copie de l'image de base dans grad_median 
       for (int i=k;i<(rows+2*k)-k;i++){
-        for (int j = k;<i(cols+2*k)-k;j++){
+        for (int j = k;< j(cols+2*k)-k;j++){
           grad_median[i*(col+2*k)+j] = frame_gray[(i-k)*col+(j-k)];
         }
       }
@@ -175,7 +175,7 @@ int main (int argc, char *argv[]) {
           }
           // on sort le temp de la boucle for sans même avoir testé => risque d'erreur
           sort (temp.begin(), temp.end());
-          frame1[(i-k)*col+(j-k)] = temp[(int) temp.size()/2];
+          frame1[(i-k)*cols+(j-k)] = temp[(int) temp.size()/2];
         }
       }
   #ifdef PROFILE
@@ -210,16 +210,16 @@ int main (int argc, char *argv[]) {
     // filtre de Sobel naif 
     for (int j = 0; j <rows-1;j++) {
       for (int i = 0; i <cols-1;i++) {
-          int n = frame_gray[i + (j-1)*rw];
+          int n = frame_gray[i + (j-1)*rows];
           //int s = T[i + (j+1)*rw];
         
-        int x = frame_gray[i + (j-1)*rw - 1] * (-1) + frame_gray[i + j*rw - 1] * (-2) + frame_gray[i + (j+1)*rw - 1] * (-1) + frame_gray[i + (j-1)*rw + 1] + frame_gray[i + j*rw + 1] * 2 + frame_gray[i + (j+1)*rw + 1];
+        int x = frame_gray[i + (j-1)*rows - 1] * (-1) + frame_gray[i + j*rows - 1] * (-2) + frame_gray[i + (j+1)*rows - 1] * (-1) + frame_gray[i + (j-1)*rows + 1] + frame_gray[i + j*rows + 1] * 2 + frame_gray[i + (j+1)*rows + 1];
         if(x<0)
         {
           x=-x;
         }
         
-        int y = frame_gray[i + (j-1)*rw - 1] + frame_gray[i + (j-1)*rw] * 2 + frame_gray[i + (j-1)*rw + 1] + frame_gray[i + (j+1)*rw - 1] * (-1) + frame_gray[i + (j+1)*rw] * (-2) + frame_gray[i + (j+1)*rw + 1] * (-1);
+        int y = frame_gray[i + (j-1)*rows - 1] + frame_gray[i + (j-1)*rows] * 2 + frame_gray[i + (j-1)*rows + 1] + frame_gray[i + (j+1)*rows - 1] * (-1) + frame_gray[i + (j+1)*rows] * (-2) + frame_gray[i + (j+1)*rows + 1] * (-1);
         if(y<0)
         {
           y=-y;
