@@ -1,4 +1,4 @@
-g++ `pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet # commande pour compiler le code 
+g++ -std=c++11 `pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet # commande pour compiler le code 
 
 echo "*************Temps de calcul pour n fixe, différentes taille d'image*************" >> result.txt 
 ./projet 240 320 3 >> result.txt #rows, cols, n 
