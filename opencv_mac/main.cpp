@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     //Mat grad_Sobel = grad.clone(); // matrice/image qui va contenir le résultat du filtrage de Sobel
     Mat grad_Sobel; // création de l'objet Mat qui va garder l'image
     Mat grad_image;
-    grad_image = imread("/Users/kowsikan/ESIEE/E4/INF-4101/opencv_xcode/test/test/2_frere.jpg"); // image en couleur
+    grad_image = imread("/Users/kowsikan/ESIEE/E4/INF-4101/projet/opencv_mac/2_frere.jpg"); // image en couleur
     // réalisation de la conversion en niveau de gris
     Mat grad; // objet Mat qui va garder l'image en niveau de gris
     cvtColor( grad_image, grad, COLOR_BGR2GRAY );
