@@ -9,3 +9,4 @@ test.sh
 *.txt
 opencv2/
 opencv_mac/projet
+filtre_median_amine.jpg
