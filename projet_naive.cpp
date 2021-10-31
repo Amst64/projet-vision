@@ -64,7 +64,7 @@ int main (int argc, char *argv[]) {
   
   }
   
-  int rows,cols,n,k; 
+  int rows,cols,n; 
   // s'il y a plus d'une valeur on va laisser l'utilisateur choisir les valeurs 
   if (argc>1){ // plus d'un argument l'utilisateur veut changer les valeurs
     rows = stoi(argv[1]); // premier argument est la taille des lignes 
@@ -80,8 +80,6 @@ int main (int argc, char *argv[]) {
     n = 17;
   }
 
-  k = ((n-3)/2)+1; // nombre de lignes/colonnes à ajouter pour pouvoir calculer le filtre median 
-
   cap.set(CAP_PROP_FRAME_WIDTH, cols);	 
   cap.set(CAP_PROP_FRAME_HEIGHT, rows);
 
@@ -91,14 +89,13 @@ int main (int argc, char *argv[]) {
 // Mat3b - structure contenant l'image 2D en couleur (trois cannaux)
 //
   Mat3b frame; // couleur
-  Mat frame1; // niveau de gris 
+  Mat frame1; // objet Mat qui va contenir le résultat du filtre median
   Mat frame_gray; // niveau de gris 
   Mat grad_x;
   Mat grad_y;
   Mat abs_grad_y;
   Mat abs_grad_x;
-  Mat grad;
-  Mat grad_median = Mat(rows+2*k,cols+2*k, CV_64F, double(0));; // image qui va nous aider à calculer le filtre median
+  Mat grad; // objet Mat qui va contenir le résultat du filtre de Sobel 
 
 // variable contenant les paramètres des images ou d'éxécution  
   int ddepth = CV_16S;
@@ -152,32 +149,33 @@ int main (int argc, char *argv[]) {
   gettimeofday(&start, NULL);
   #endif
         
-      // ------------------------------------------------
-      // calcul de la mediane - version naïve 
+      // // ------------------------------------------------
+      // // calcul de la mediane - librairie OpenCV
       // medianBlur(frame_gray, frame1, n);
 
-      // copie de l'image de base dans grad_median 
-      for (int i=k;i<(rows+2*k)-k;i++){
-        for (int j = k;< j(cols+2*k)-k;j++){
-          grad_median[i*(col+2*k)+j] = frame_gray[(i-k)*col+(j-k)];
-        }
+      // PARTIE FILTRE MEDIAN 
+    Mat grad_median = Mat(rows+2*k,cols+2*k,CV_8U);
+    for (int i=k; i<grad_median.rows-k; i++){
+      for (int j=k; j<grad_median.cols-k;j++){
+        grad_median.at<uint8_t>(i,j) = frame_gray.at<uint8_t>(i-k,j-k);
       }
+    }
 
-
-      // parcours de la matrice pour réaliser le filtrage 
-      for (int i = k; i<(rows+2*k)-k;i++){
-        for (int j= k;j<(cols+2*k)-k;j++){
-          auto temp = vector<int>(); 
-          for (int ind_i = -k;ind_i<k+1;ind_i++){
-            for (int ind_j = -k;ind_j<k+1;ind_j++){
-              temp.push_back(grad_median[(i+ind_i)*(col+2*k)+(j+ind_j)])
+    // début du filtrage 
+    for (int i=k; i<grad_median.rows-k;i++){
+      for (int j = k; j<grad_median.cols-k;j++){
+        auto temp = vector<int>();
+        for (int ind_i = -k; ind_i<k+1;ind_i++){
+                for (int ind_j= -k; ind_j<k+1; ind_j++){
+                    temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
+                    // mettre les 3 lignes du dessous ici pour ralentir le temps d'exécution du programme ?
+                }
             }
-          }
-          // on sort le temp de la boucle for sans même avoir testé => risque d'erreur
-          sort (temp.begin(), temp.end());
-          frame1[(i-k)*cols+(j-k)] = temp[(int) temp.size()/2];
-        }
+            sort (temp.begin(), temp.end()); // tri du vecteur temp
+            frame1.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()/2];
       }
+    }
+
   #ifdef PROFILE
   gettimeofday(&end, NULL);
   double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
@@ -192,8 +190,7 @@ int main (int argc, char *argv[]) {
   // struct timeval start, end;
   gettimeofday(&start, NULL);
   #endif  
-
-  // calcul du filtre de Sobel avec la verison naïve  
+  
     //   // ------------------------------------------------
     //   // calcul du gradient- librairie OpenCV
     //   /// Gradient Y
@@ -206,29 +203,28 @@ int main (int argc, char *argv[]) {
     //   convertScaleAbs( grad_y, abs_grad_y );
     //   /// Total Gradient (approximate)
     //   addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad ); 	
+    
 
-    // filtre de Sobel naif 
-    for (int j = 0; j <rows-1;j++) {
-      for (int i = 0; i <cols-1;i++) {
-          int n = frame_gray[i + (j-1)*rows];
-          //int s = T[i + (j+1)*rw];
-        
-        int x = frame_gray[i + (j-1)*rows - 1] * (-1) + frame_gray[i + j*rows - 1] * (-2) + frame_gray[i + (j+1)*rows - 1] * (-1) + frame_gray[i + (j-1)*rows + 1] + frame_gray[i + j*rows + 1] * 2 + frame_gray[i + (j+1)*rows + 1];
-        if(x<0)
-        {
-          x=-x;
+
+    // FILTRE DE SOBEL
+    for (int i = 1; i<frame_gray.rows-1;i++){
+        for (int j = 1; j < frame_gray.cols-1;j++){
+            int x = frame_gray.at<uint8_t>(i-1,j-1)+frame_gray.at<uint8_t>(i-1,j)*2+frame_gray.at<uint8_t>(i-1,j+1)+frame_gray.at<uint8_t>(i+1,j-1)*(-1)+frame_gray.at<uint8_t>(i+1,j)*(-2)+frame_gray.at<uint8_t>(i+1,j+1)*(-1);
+            int y = frame_gray.at<uint8_t>(i-1,j-1)*(-1)+frame_gray.at<uint8_t>(i-1,j+1)+frame_gray.at<uint8_t>(i,j-1)*(-2)+frame_gray.at<uint8_t>(i,j+1)*2+frame_gray.at<uint8_t>(i+1,j-1)*(-1)+frame_gray.at<uint8_t>(i+1,j+1);
+            if (x<0){
+                x = -x;
+            }
+            if (y<0){
+                y = -y;
+            }
+//            cout<<(int)grad.at<uint8_t>(i-1,j-1)<<" "<<(int) grad.at<uint8_t>(i-1,j)<<" "<<(int)grad.at<uint8_t>(i-1,j+1)<<endl;
+//            cout<<(int) grad.at<uint8_t>(i,j-1)<<" "<<(int) grad.at<uint8_t>(i,j)<<" "<<(int)grad.at<uint8_t>(i,j+1)<<endl;
+//            cout<<(int) grad.at<uint8_t>(i+1,j-1)<<" "<<(int) grad.at<uint8_t>(i+1,j)<<" "<<(int)grad.at<uint8_t>(i+1,j+1)<<endl;
+            //cout<<"La valeur de x : "<<x<<"\nLa valeur de y : "<<y<<endl;
+            //cout<<"La valeur de Sobel est "<<(x+y)/2<<endl;
+            grad.at<uint8_t>(i,j) = (x+y)/2;
         }
-        
-        int y = frame_gray[i + (j-1)*rows - 1] + frame_gray[i + (j-1)*rows] * 2 + frame_gray[i + (j-1)*rows + 1] + frame_gray[i + (j+1)*rows - 1] * (-1) + frame_gray[i + (j+1)*rows] * (-2) + frame_gray[i + (j+1)*rows + 1] * (-1);
-        if(y<0)
-        {
-          y=-y;
-        }
-        
-        grad[i + j*rw] = (x+y)/2;
-      }
     }
-  
   #ifdef PROFILE
   gettimeofday(&end, NULL);
   e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
