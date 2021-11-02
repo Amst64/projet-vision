@@ -80,7 +80,7 @@ int main (int argc, char *argv[]) {
   
   }
   
-  
+  signal(SIGINT,signal_callback_handler);
   // s'il y a plus d'une valeur on va laisser l'utilisateur choisir les valeurs 
   if (argc>1){ // plus d'un argument l'utilisateur veut changer les valeurs
     rows = stoi(argv[1]); // premier argument est la taille des lignes 
