@@ -172,28 +172,28 @@ int main (int argc, char *argv[]) {
       // medianBlur(frame_gray, frame1, n);
 
       // PARTIE FILTRE MEDIAN 
-    Mat grad_median = Mat(rows+2*k,cols+2*k,CV_8U);
-    for (int i=k; i<grad_median.rows-k; i++){
-      for (int j=k; j<grad_median.cols-k;j++){
-        grad_median.at<uint8_t>(i,j) = frame_gray.at<uint8_t>(i-k,j-k);
-      }
-    }
-
     frame1 = frame_gray.clone();
-    // début du filtrage 
-    for (int i=k; i<grad_median.rows-k;i++){
-      for (int j = k; j<grad_median.cols-k;j++){
-        auto temp = vector<int>();
-        for (int ind_i = -k; ind_i<k+1;ind_i++){
-                for (int ind_j= -k; ind_j<k+1; ind_j++){
-                    temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
-                    // mettre les 3 lignes du dessous ici pour ralentir le temps d'exécution du programme ?
-                }
-            }
-            sort (temp.begin(), temp.end()); // tri du vecteur temp
-            frame1.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()/2];
-      }
-    }
+    // Mat grad_median = Mat(rows+2*k,cols+2*k,CV_8U);
+    // for (int i=k; i<grad_median.rows-k; i++){
+    //   for (int j=k; j<grad_median.cols-k;j++){
+    //     grad_median.at<uint8_t>(i,j) = frame_gray.at<uint8_t>(i-k,j-k);
+    //   }
+    // }
+
+    // // début du filtrage 
+    // for (int i=k; i<grad_median.rows-k;i++){
+    //   for (int j = k; j<grad_median.cols-k;j++){
+    //     auto temp = vector<int>();
+    //     for (int ind_i = -k; ind_i<k+1;ind_i++){
+    //             for (int ind_j= -k; ind_j<k+1; ind_j++){
+    //                 temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
+    //                 // mettre les 3 lignes du dessous ici pour ralentir le temps d'exécution du programme ?
+    //             }
+    //         }
+    //         sort (temp.begin(), temp.end()); // tri du vecteur temp
+    //         frame1.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()/2];
+    //   }
+    // }
 
   #ifdef PROFILE
   gettimeofday(&end, NULL);
