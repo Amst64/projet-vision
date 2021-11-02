@@ -173,7 +173,7 @@ int main (int argc, char *argv[]) {
 
       // PARTIE FILTRE MEDIAN 
     frame1 = frame_gray.clone();
-    Mat grad_median = Mat(frale_gray.rows+2*k,frame_gray.cols+2*k,CV_8U);
+    Mat grad_median = Mat(frame_gray.rows+2*k,frame_gray.cols+2*k,CV_8U);
     for (int i=k; i<grad_median.rows-k; i++){
       for (int j=k; j<grad_median.cols-k;j++){
         grad_median.at<uint8_t>(i,j) = frame_gray.at<uint8_t>(i-k,j-k);
