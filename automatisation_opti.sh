@@ -19,13 +19,17 @@ echo "*************Temps de calcul avec taille d'image fixe, différents n******
 echo "*********************************************************************" >> result_opti.txt 
 
 echo "*************Temps de calcul avec taille d'image et n fixe mais niveau d'opti différent*************" >> result_opti.txt 
-g++ -std=c++11 -O0`pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti # commande pour compiler le code 
+g++ -std=c++11 `pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti -O0 # commande pour compiler le code 
 ./projet_opti 480 640 5 >> result_opti.txt #rows, cols, n      
-g++ -std=c++11 -O1`pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti # commande pour compiler le code 
+g++ -std=c++11 `pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti -O1 # commande pour compiler le code 
 ./projet_opti 480 640 5 >> result_opti.txt #rows, cols, n      
-g++ -std=c++11 -O2`pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti # commande pour compiler le code 
+g++ -std=c++11 `pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti -O2 # commande pour compiler le code 
 ./projet_opti 480 640 5 >> result_opti.txt #rows, cols, n      
-g++ -std=c++11 -O3`pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti # commande pour compiler le code 
+g++ -std=c++11 `pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti -O3 # commande pour compiler le code 
+./projet_opti 480 640 5 >> result_opti.txt #rows, cols, n      
+g++ -std=c++11 `pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti -Ofast # commande pour compiler le code 
+./projet_opti 480 640 5 >> result_opti.txt #rows, cols, n      
+g++ -std=c++11 `pkg-config --cflags opencv` projet_base.cpp `pkg-config --libs opencv` -o projet_opti -Og # commande pour compiler le code 
 ./projet_opti 480 640 5 >> result_opti.txt #rows, cols, n      
 echo "*********************************************************************" >> result_opti.txt 
 
