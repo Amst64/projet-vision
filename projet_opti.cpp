@@ -8,7 +8,7 @@
  * modification : Eva Dokladalova 10/2021
  */
 
-
+// utiliser soit le tri fusion, par tas ou quicksort pour trier la liste du median 
 /* 
  * Libraries stantards 
  *
@@ -16,6 +16,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <cstdlib>
+#include <signal.h>
 #include <cmath> // module pour utiliser les valeurs absolue
 
 /* 
@@ -35,6 +38,25 @@
 using namespace std;
 using namespace cv;
 using std::cout;
+
+
+int rows,cols,n; 
+double moy_median =0;
+int n_median =0;
+double moy_sobel =0; 
+int n_sobel =0; 
+
+// fonction pour gérer l'exeception keyboard interrupt 
+void signal_callback_handler(int signum){
+  cout<<"======================================================================================================================================================="<<endl;
+  cout<<"La valeur de n pour le filtre de median est "<<n<<endl;
+  cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<cols<<endl;
+  cout<<"nb image pour le filtre median "<<n_median<<" moy pour median "<<moy_median/n_median<<" ms"<<endl;
+  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<" ms"<<endl;
+  cout<<"======================================================================================================================================================="<<endl;
+  exit(signum);
+}
+
 
 /*
  * Some usefull defines
@@ -59,13 +81,13 @@ int main (int argc, char *argv[]) {
 //----------------------------------------------
 // Video acquisition - opening
 //----------------------------------------------
-  VideoCapture cap(4); // le numéro 0 indique le point d'accès à la caméra 0 => /dev/video0
+  VideoCapture cap(0); // le numéro 0 indique le point d'accès à la caméra 0 => /dev/video0
   if(!cap.isOpened()){
     cout << "Error"; return -1;
   
   }
   
-  int rows,cols,n; 
+  signal(SIGINT,signal_callback_handler);
   // s'il y a plus d'une valeur on va laisser l'utilisateur choisir les valeurs 
   if (argc>1){ // plus d'un argument l'utilisateur veut changer les valeurs
     rows = stoi(argv[1]); // premier argument est la taille des lignes 
@@ -102,10 +124,7 @@ int main (int argc, char *argv[]) {
   int ddepth = CV_16S;
   int scale = 1;
   int delta = 0;	
-  double moy_median =0;
-  int n_median =0;
-  double moy_sobel =0; 
-  int n_sobel =0; 
+  
   unsigned char key = '0';
 
  #define PROFILE
@@ -219,8 +238,8 @@ int main (int argc, char *argv[]) {
   cout<<"======================================================================================================================================================="<<endl;
   cout<<"La valeur de n pour le filtre de median est "<<n<<endl;
   cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<cols<<endl;
-  cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
-  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
+  cout<<"nb image pour le filtre median "<<n_median<<" moy pour median "<<moy_median/n_median<<" ms"<<endl;
+  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<" ms"<<endl;
   cout<<"======================================================================================================================================================="<<endl;
 }
 

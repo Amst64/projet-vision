@@ -48,8 +48,8 @@ void signal_callback_handler(int signum){
   cout<<"======================================================================================================================================================="<<endl;
   cout<<"La valeur de n pour le filtre de median est "<<n<<endl;
   cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<cols<<endl;
-  cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
-  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
+  cout<<"nb image pour le filtre median "<<n_median<<" moy pour median "<<moy_median/n_median<<" ms"<<endl;
+  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<" ms"<<endl;
   cout<<"======================================================================================================================================================="<<endl;
   exit(signum);
 }
@@ -226,8 +226,8 @@ int main (int argc, char *argv[]) {
   cout<<"======================================================================================================================================================="<<endl;
   cout<<"La valeur de n pour le filtre de median est "<<n<<endl;
   cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<cols<<endl;
-  cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
-  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
+  cout<<"nb image pour le filtre median "<<n_median<<" moy pour median "<<moy_median/n_median<<" ms"<<endl;
+  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<" ms"<<endl;
   cout<<"======================================================================================================================================================="<<endl;
 }
 

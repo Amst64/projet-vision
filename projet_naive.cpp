@@ -16,6 +16,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <cstdlib>
+#include <signal.h>
+#include <cmath>
 
 /* 
  * Libraries OpenCV "obligatoires" 
@@ -34,6 +38,23 @@
 using namespace std;
 using namespace cv;
 using std::cout;
+
+int rows,cols,n; 
+double moy_median =0;
+int n_median =0;
+double moy_sobel =0; 
+int n_sobel =0; 
+
+// fonction pour gérer l'exeception keyboard interrupt 
+void signal_callback_handler(int signum){
+  cout<<"======================================================================================================================================================="<<endl;
+  cout<<"La valeur de n pour le filtre de median est "<<n<<endl;
+  cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<cols<<endl;
+  cout<<"nb image pour le filtre median "<<n_median<<" moy pour median "<<moy_median/n_median<<" ms"<<endl;
+  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<" ms"<<endl;
+  cout<<"======================================================================================================================================================="<<endl;
+  exit(signum);
+}
 
 /*
  * Some usefull defines
@@ -58,13 +79,14 @@ int main (int argc, char *argv[]) {
 //----------------------------------------------
 // Video acquisition - opening
 //----------------------------------------------
-  VideoCapture cap(4); // le numéro 0 indique le point d'accès à la caméra 0 => /dev/video0
+  VideoCapture cap(0); // le numéro 0 indique le point d'accès à la caméra 0 => /dev/video0
   if(!cap.isOpened()){
     cout << "Error"; return -1;
   
   }
   
-  int rows,cols,n; 
+  signal(SIGINT,signal_callback_handler);
+
   // s'il y a plus d'une valeur on va laisser l'utilisateur choisir les valeurs 
   if (argc>1){ // plus d'un argument l'utilisateur veut changer les valeurs
     rows = stoi(argv[1]); // premier argument est la taille des lignes 
@@ -100,11 +122,7 @@ int main (int argc, char *argv[]) {
 // variable contenant les paramètres des images ou d'éxécution  
   int ddepth = CV_16S;
   int scale = 1;
-  int delta = 0;	
-  double moy_median =0;
-  int n_median =0;
-  double moy_sobel =0; 
-  int n_sobel =0; 
+  int delta = 0;	 
   unsigned char key = '0';
 
  #define PROFILE
@@ -217,9 +235,9 @@ int main (int argc, char *argv[]) {
             if (y<0){
                 y = -y;
             }
-//            cout<<(int)grad.at<uint8_t>(i-1,j-1)<<" "<<(int) grad.at<uint8_t>(i-1,j)<<" "<<(int)grad.at<uint8_t>(i-1,j+1)<<endl;
-//            cout<<(int) grad.at<uint8_t>(i,j-1)<<" "<<(int) grad.at<uint8_t>(i,j)<<" "<<(int)grad.at<uint8_t>(i,j+1)<<endl;
-//            cout<<(int) grad.at<uint8_t>(i+1,j-1)<<" "<<(int) grad.at<uint8_t>(i+1,j)<<" "<<(int)grad.at<uint8_t>(i+1,j+1)<<endl;
+            //cout<<(int)grad.at<uint8_t>(i-1,j-1)<<" "<<(int) grad.at<uint8_t>(i-1,j)<<" "<<(int)grad.at<uint8_t>(i-1,j+1)<<endl;
+            //cout<<(int) grad.at<uint8_t>(i,j-1)<<" "<<(int) grad.at<uint8_t>(i,j)<<" "<<(int)grad.at<uint8_t>(i,j+1)<<endl;
+            //cout<<(int) grad.at<uint8_t>(i+1,j-1)<<" "<<(int) grad.at<uint8_t>(i+1,j)<<" "<<(int)grad.at<uint8_t>(i+1,j+1)<<endl;
             //cout<<"La valeur de x : "<<x<<"\nLa valeur de y : "<<y<<endl;
             //cout<<"La valeur de Sobel est "<<(x+y)/2<<endl;
             grad.at<uint8_t>(i,j) = (x+y)/2;
@@ -255,8 +273,8 @@ int main (int argc, char *argv[]) {
   cout<<"======================================================================================================================================================="<<endl;
   cout<<"La valeur de n pour le filtre de median est "<<n<<endl;
   cout<<"La résolution de l'image est :\nrows : "<<rows<<"col : "<<cols<<endl;
-  cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
-  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
+  cout<<"nb image pour le filtre median "<<n_median<<" moy pour median "<<moy_median/n_median<<" ms"<<endl;
+  cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<" ms"<<endl;
   cout<<"======================================================================================================================================================="<<endl;
 }
 
