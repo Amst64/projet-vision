@@ -51,6 +51,7 @@ void signal_callback_handler(int signum){
   cout<<"nb image pour le filtre median "<<n_median<<"moy pour median "<<moy_median/n_median<<endl;
   cout<<"nb image pour le filtre sobel "<<n_sobel<<" moy pour sobel "<< moy_sobel/n_sobel<<endl;
   cout<<"======================================================================================================================================================="<<endl;
+  exit(signum);
 }
 
 /*
