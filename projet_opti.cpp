@@ -205,10 +205,15 @@ int main (int argc, char *argv[]) {
     
 
     // filtre Sobel avec le déroulement de bouble
-    for (int j = 1;j<rows-2;j+=2){
-      for (int i =1;i<cols-2;i+=2){
-        grad[i + j*rw] = (abs(frame_gray[i + (j-1)*rw - 1] * (-1) + frame_gray[i + j*rw - 1] * (-2) + frame_gray[i + (j+1)*rw - 1] * (-1) + frame_gray[i + (j-1)*rw + 1] + frame_gray[i + j*rw + 1] * 2 + frame_gray[i + (j+1)*rw + 1])+abs(frame_gray[(i+1) + ((j+1)-1)*rw - 1] * (-1) + frame_gray[(i+1) + (j+1)*rw - 1] * (-2) + frame_gray[(i+1) + ((j+1)+1)*rw - 1] * (-1) + frame_gray[(i+1) + ((j+1)-1)*rw + 1] + frame_gray[(i+1) + (j+1)*rw + 1] * 2 + frame_gray[(i+1) + ((j+1)+1)*rw + 1]))/2;
-        grad[(i+1) + (j+1)*rw] = (abs(frame_gray[i + (j-1)*rw - 1] + frame_gray[i + (j-1)*rw] * 2 + frame_gray[i + (j-1)*rw + 1] + frame_gray[i + (j+1)*rw - 1] * (-1) + frame_gray[i + (j+1)*rw] * (-2) + frame_gray[i + (j+1)*rw + 1] * (-1))+abs(frame_gray[(i+1) + ((j+1)-1)*rw - 1] + frame_gray[(i+1) + ((j+1)-1)*rw] * 2 + frame_gray[(i+1) + ((j+1)-1)*rw + 1] + frame_gray[(i+1) + ((j+1)+1)*rw - 1] * (-1) + frame_gray[(i+1) + ((j+1)+1)*rw] * (-2) + frame_gray[(i+1) + ((j+1)+1)*rw + 1] * (-1)))
+    for (int i = 1;i<rows-2;i+=2){
+      for (int j =1;j<cols-2;j+=2){
+        int x = frame_gray.at<uint8_t>(i-1,j-1)*(-1)+frame_gray.at<uint8_t>(i-1,j)*(-2)+frame_gray.at<uint8_t>(i-1,j+1)*(-1)+frame_gray.at<uint8_t>(i+1,j-1)+frame_gray.at<uint8_t>(i+1,j)*2+frame_gray.at<uint8_t>(i+1,j+1);
+        int y = frame_gray.at<uint8_t>(i-1,j-1)+frame_gray.at<uint8_t>(i-1,j+1)*(-1)+frame_gray.at<uint8_t>(i,j-1)*2+frame_gray.at<uint8_t>(i,j+1)*(-2)+frame_gray.at<uint8_t>(i+1,j-1)+frame_gray.at<uint8_t>(i+1,j+1)*(-1);
+			  int x2 = frame_gray.at<uint8_t>(i,j-1)*(-1)+frame_gray.at<uint8_t>(i,j)*(-2)+frame_gray.at<uint8_t>(i,j+1)*(-1)+frame_gray.at<uint8_t>(i+2,j-1)+frame_gray.at<uint8_t>(i+2,j)*2+frame_gray.at<uint8_t>(i+2,j+1);
+        int y2 = frame_gray.at<uint8_t>(i,j-1)+frame_gray.at<uint8_t>(i,j+1)*(-1)+frame_gray.at<uint8_t>(i+1,j-1)*2+frame_gray.at<uint8_t>(i+1,j+1)*(-2)+frame_gray.at<uint8_t>(i+2,j-1)+frame_gray.at<uint8_t>(i+2,j+1)*(-1);
+
+        grad.at<uint8_t>(i,j) = (abs(x)+abs(y))/2;
+        grad.at<uint8_t>(i+1,j)= (abs(x2)+abs(y2))/2;
       }
     }
 
