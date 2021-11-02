@@ -179,6 +179,7 @@ int main (int argc, char *argv[]) {
       }
     }
 
+    frame1 = frame_gray.clone();
     // début du filtrage 
     for (int i=k; i<grad_median.rows-k;i++){
       for (int j = k; j<grad_median.cols-k;j++){
