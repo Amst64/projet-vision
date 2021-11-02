@@ -101,13 +101,13 @@ int main (int argc, char *argv[]) {
     
     n = 17;
   }
-
+  int k = ((n-3)/2)+1; 
   cap.set(CAP_PROP_FRAME_WIDTH, cols);	 
   cap.set(CAP_PROP_FRAME_HEIGHT, rows);
 
 //----------------------------------------------
 // Déclaration des variables - imagesize
-// Mat - structure contenant l'image 2D niveau de gris
+// Mat - structure contenant l'image 2D niveau de gri
 // Mat3b - structure contenant l'image 2D en couleur (trois cannaux)
 //
   Mat3b frame; // couleur
