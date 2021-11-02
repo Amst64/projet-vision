@@ -12,9 +12,10 @@
 #include "opencv2/highgui/highgui.hpp"
 
 #include "opencv2/imgproc/imgproc.hpp"
-
+#include <cmath> // module pour utiliser les valeurs absolue
 #include <time.h>
 #include <sys/time.h>
+
 using namespace std;
 using namespace::cv;
 
@@ -47,22 +48,15 @@ int main(int argc, const char * argv[]) {
 //    cout<<"\n\n"<<endl;
 //    cout<<grad_median<<endl;
     
-//    // création de la matrice image sur laquelle on va bosser
-//    for (int i =0; i<grad.rows;i++){
-//        for (int j= 0; j<grad.cols;j++){
-//            grad.at<uint8_t>(i,j) = conteneur[conteneur_i];
-//            conteneur_i++;
-//        }
-//
-//    }
-    
 
-  struct timeval start, end;
-  gettimeofday(&start, NULL);
-    // copie de la valeur de l'image dans la matrice grad_median
+
+struct timeval start, end;
+gettimeofday(&start, NULL);    
+    //copie de la valeur de l'image dans la matrice grad_median
     for (int i =k; i<grad_median.rows-k;i++){
         for (int j= k; j<grad_median.cols-k;j++){
             grad_median.at<uint8_t>(i,j) = grad.at<uint8_t>(i-k,j-k);
+            //grad_median.at<uint8_t>(i+1,j+1) = grad.at<uint8_t>(i+1-k,j-k+1);
         }
         
     }
@@ -73,27 +67,31 @@ int main(int argc, const char * argv[]) {
 //    cout<<grad_median<<endl;
 
     // on réalise le filtrage (médian)
+    auto temp = vector<int>(); // vecteur qui va stocker les valeurs que l'on obtient avec la matrice nxn de filtrage
+    auto temp_1 = vector<int>(); // vecteur qui va stocker les valeurs que l'on obtient avec la matrice nxn de filtrage
     cout<<"Debut du filtrage"<<endl;
-
-    for (int i = k; i<grad_median.rows-k;i++){
+    for (int i = k; i<grad_median.rows-k-1;i+=2){
         for (int j = k; j<grad_median.cols-k; j++){
-            auto temp = vector<int>(); // vecteur qui va stocker les valeurs que l'on obtient avec la matrice nxn de filtrage
             for (int ind_i = -k; ind_i<k+1;ind_i++){
                 for (int ind_j= -k; ind_j<k+1; ind_j++){
                     temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
+                    temp_1.push_back(grad_median.at<uint8_t>(i+1+ind_i,j+ind_j));
                     // mettre les 3 lignes du dessous ici pour ralentir le temps d'exécution du programme ?
                 }
             }
             sort (temp.begin(), temp.end()); // tri du vecteur temp
+            sort (temp_1.begin(), temp_1.end()); // tri du vecteur temp
             //cout<<"La valeur de la médiane est "<<temp[(int) temp.size()/2]<<" "<<endl;
             grad.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()/2];
+            grad.at<uint8_t>(i-k+1,j-k) = temp_1[(int) temp_1.size()/2];
+            temp.clear();
+            temp_1.clear();
         }
     }
 gettimeofday(&end, NULL);
 double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
 double s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
-cout<<"Le temps d'exécution du programme naif pour le filtre de median est "<<(e-s)<<endl;
-    
+cout<<"Le temps d'exécution du programme opti pour le filtre de median est "<<(e-s)<<endl;
     
     // PARTIE FILTRE DE SOBEL
     
@@ -102,22 +100,20 @@ cout<<"Le temps d'exécution du programme naif pour le filtre de median est "<<(
     //cout<<grad<<endl;
     cout<<endl;
     cout<<endl;
-    for (int i = 1; i<grad.rows-1;i++){
-        for (int j = 1; j < grad.cols-1;j++){
-            int x = grad.at<uint8_t>(i-1,j-1)+grad.at<uint8_t>(i-1,j)*2+grad.at<uint8_t>(i-1,j+1)+grad.at<uint8_t>(i+1,j-1)*(-1)+grad.at<uint8_t>(i+1,j)*(-2)+grad.at<uint8_t>(i+1,j+1)*(-1);
-            int y = grad.at<uint8_t>(i-1,j-1)*(-1)+grad.at<uint8_t>(i-1,j+1)+grad.at<uint8_t>(i,j-1)*(-2)+grad.at<uint8_t>(i,j+1)*2+grad.at<uint8_t>(i+1,j-1)*(-1)+grad.at<uint8_t>(i+1,j+1);
-            if (x<0){
-                x = -x;
-            }
-            if (y<0){
-                y = -y;
-            }
+    for (int i = 1; i<grad.rows-2;i+=2) {
+        for (int j = 1; j < grad.cols-1;j+=1){
+            int x = grad.at<uint8_t>(i-1,j-1)*(-1)+grad.at<uint8_t>(i-1,j)*(-2)+grad.at<uint8_t>(i-1,j+1)*(-1)+grad.at<uint8_t>(i+1,j-1)+grad.at<uint8_t>(i+1,j)*2+grad.at<uint8_t>(i+1,j+1);
+            int y = grad.at<uint8_t>(i-1,j-1)+grad.at<uint8_t>(i-1,j+1)*(-1)+grad.at<uint8_t>(i,j-1)*2+grad.at<uint8_t>(i,j+1)*(-2)+grad.at<uint8_t>(i+1,j-1)+grad.at<uint8_t>(i+1,j+1)*(-1);
+			
+			int x2 = grad.at<uint8_t>(i,j-1)*(-1)+grad.at<uint8_t>(i,j)*(-2)+grad.at<uint8_t>(i,j+1)*(-1)+grad.at<uint8_t>(i+2,j-1)+grad.at<uint8_t>(i+2,j)*2+grad.at<uint8_t>(i+2,j+1);
+            int y2 = grad.at<uint8_t>(i,j-1)+grad.at<uint8_t>(i,j+1)*(-1)+grad.at<uint8_t>(i+1,j-1)*2+grad.at<uint8_t>(i+1,j+1)*(-2)+grad.at<uint8_t>(i+2,j-1)+grad.at<uint8_t>(i+2,j+1)*(-1);
 //            cout<<(int)grad.at<uint8_t>(i-1,j-1)<<" "<<(int) grad.at<uint8_t>(i-1,j)<<" "<<(int)grad.at<uint8_t>(i-1,j+1)<<endl;
 //            cout<<(int) grad.at<uint8_t>(i,j-1)<<" "<<(int) grad.at<uint8_t>(i,j)<<" "<<(int)grad.at<uint8_t>(i,j+1)<<endl;
 //            cout<<(int) grad.at<uint8_t>(i+1,j-1)<<" "<<(int) grad.at<uint8_t>(i+1,j)<<" "<<(int)grad.at<uint8_t>(i+1,j+1)<<endl;
             //cout<<"La valeur de x : "<<x<<"\nLa valeur de y : "<<y<<endl;
             //cout<<"La valeur de Sobel est "<<(x+y)/2<<endl;
-            grad_Sobel.at<uint8_t>(i,j) = (x+y)/2;
+            grad_Sobel.at<uint8_t>(i,j) = (abs(x)+abs(y))/2;
+            grad_Sobel.at<uint8_t>(i+1,j)= (abs(x2)+abs(y2))/2;
         }
     }
     
