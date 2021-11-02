@@ -173,27 +173,27 @@ int main (int argc, char *argv[]) {
 
       // PARTIE FILTRE MEDIAN 
     frame1 = frame_gray.clone();
-    // Mat grad_median = Mat(rows+2*k,cols+2*k,CV_8U);
-    // for (int i=k; i<grad_median.rows-k; i++){
-    //   for (int j=k; j<grad_median.cols-k;j++){
-    //     grad_median.at<uint8_t>(i,j) = frame_gray.at<uint8_t>(i-k,j-k);
-    //   }
-    // }
+    Mat grad_median = Mat(rows+2*k,cols+2*k,CV_8U);
+    for (int i=k; i<grad_median.rows-k; i++){
+      for (int j=k; j<grad_median.cols-k;j++){
+        grad_median.at<uint8_t>(i,j) = frame_gray.at<uint8_t>(i-k,j-k);
+      }
+    }
 
-    // // début du filtrage 
-    // for (int i=k; i<grad_median.rows-k;i++){
-    //   for (int j = k; j<grad_median.cols-k;j++){
-    //     auto temp = vector<int>();
-    //     for (int ind_i = -k; ind_i<k+1;ind_i++){
-    //             for (int ind_j= -k; ind_j<k+1; ind_j++){
-    //                 temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
-    //                 // mettre les 3 lignes du dessous ici pour ralentir le temps d'exécution du programme ?
-    //             }
-    //         }
-    //         sort (temp.begin(), temp.end()); // tri du vecteur temp
-    //         frame1.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()/2];
-    //   }
-    // }
+    // début du filtrage 
+    for (int i=k; i<grad_median.rows-k;i++){
+      for (int j = k; j<grad_median.cols-k;j++){
+        auto temp = vector<int>();
+        for (int ind_i = -k; ind_i<k+1;ind_i++){
+                for (int ind_j= -k; ind_j<k+1; ind_j++){
+                    temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
+                    // mettre les 3 lignes du dessous ici pour ralentir le temps d'exécution du programme ?
+                }
+            }
+            sort (temp.begin(), temp.end()); // tri du vecteur temp
+            frame1.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()/2];
+      }
+    }
 
   #ifdef PROFILE
   gettimeofday(&end, NULL);
@@ -224,26 +224,26 @@ int main (int argc, char *argv[]) {
     //   addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad ); 	
     
 
-
-    // FILTRE DE SOBEL
-    for (int i = 1; i<frame_gray.rows-1;i++){
-        for (int j = 1; j < frame_gray.cols-1;j++){
-            int x = frame_gray.at<uint8_t>(i-1,j-1)+frame_gray.at<uint8_t>(i-1,j)*2+frame_gray.at<uint8_t>(i-1,j+1)+frame_gray.at<uint8_t>(i+1,j-1)*(-1)+frame_gray.at<uint8_t>(i+1,j)*(-2)+frame_gray.at<uint8_t>(i+1,j+1)*(-1);
-            int y = frame_gray.at<uint8_t>(i-1,j-1)*(-1)+frame_gray.at<uint8_t>(i-1,j+1)+frame_gray.at<uint8_t>(i,j-1)*(-2)+frame_gray.at<uint8_t>(i,j+1)*2+frame_gray.at<uint8_t>(i+1,j-1)*(-1)+frame_gray.at<uint8_t>(i+1,j+1);
-            if (x<0){
-                x = -x;
-            }
-            if (y<0){
-                y = -y;
-            }
-            //cout<<(int)grad.at<uint8_t>(i-1,j-1)<<" "<<(int) grad.at<uint8_t>(i-1,j)<<" "<<(int)grad.at<uint8_t>(i-1,j+1)<<endl;
-            //cout<<(int) grad.at<uint8_t>(i,j-1)<<" "<<(int) grad.at<uint8_t>(i,j)<<" "<<(int)grad.at<uint8_t>(i,j+1)<<endl;
-            //cout<<(int) grad.at<uint8_t>(i+1,j-1)<<" "<<(int) grad.at<uint8_t>(i+1,j)<<" "<<(int)grad.at<uint8_t>(i+1,j+1)<<endl;
-            //cout<<"La valeur de x : "<<x<<"\nLa valeur de y : "<<y<<endl;
-            //cout<<"La valeur de Sobel est "<<(x+y)/2<<endl;
-            grad.at<uint8_t>(i,j) = (x+y)/2;
-        }
-    }
+  grad = frame_gray.clone();
+    // // FILTRE DE SOBEL
+    // for (int i = 1; i<frame_gray.rows-1;i++){
+    //     for (int j = 1; j < frame_gray.cols-1;j++){
+    //         int x = frame_gray.at<uint8_t>(i-1,j-1)+frame_gray.at<uint8_t>(i-1,j)*2+frame_gray.at<uint8_t>(i-1,j+1)+frame_gray.at<uint8_t>(i+1,j-1)*(-1)+frame_gray.at<uint8_t>(i+1,j)*(-2)+frame_gray.at<uint8_t>(i+1,j+1)*(-1);
+    //         int y = frame_gray.at<uint8_t>(i-1,j-1)*(-1)+frame_gray.at<uint8_t>(i-1,j+1)+frame_gray.at<uint8_t>(i,j-1)*(-2)+frame_gray.at<uint8_t>(i,j+1)*2+frame_gray.at<uint8_t>(i+1,j-1)*(-1)+frame_gray.at<uint8_t>(i+1,j+1);
+    //         if (x<0){
+    //             x = -x;
+    //         }
+    //         if (y<0){
+    //             y = -y;
+    //         }
+    //         //cout<<(int)grad.at<uint8_t>(i-1,j-1)<<" "<<(int) grad.at<uint8_t>(i-1,j)<<" "<<(int)grad.at<uint8_t>(i-1,j+1)<<endl;
+    //         //cout<<(int) grad.at<uint8_t>(i,j-1)<<" "<<(int) grad.at<uint8_t>(i,j)<<" "<<(int)grad.at<uint8_t>(i,j+1)<<endl;
+    //         //cout<<(int) grad.at<uint8_t>(i+1,j-1)<<" "<<(int) grad.at<uint8_t>(i+1,j)<<" "<<(int)grad.at<uint8_t>(i+1,j+1)<<endl;
+    //         //cout<<"La valeur de x : "<<x<<"\nLa valeur de y : "<<y<<endl;
+    //         //cout<<"La valeur de Sobel est "<<(x+y)/2<<endl;
+    //         grad.at<uint8_t>(i,j) = (x+y)/2;
+    //     }
+    // }
   #ifdef PROFILE
   gettimeofday(&end, NULL);
   e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
