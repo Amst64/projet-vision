@@ -175,6 +175,34 @@ int main (int argc, char *argv[]) {
       // medianBlur(frame_gray, frame1, n);
 
       // filtre median optimisée 
+
+    frame1 = frame_gray.clone();
+    Mat grad_median = Mat(frame_gray.rows+2*k,frame_gray.cols+2*k,CV_8U);
+    for (int i=k; i<grad_median.rows-k; i++){
+      for (int j=k; j<grad_median.cols-k;j++){
+        grad_median.at<uint8_t>(i,j) = frame_gray.at<uint8_t>(i-k,j-k);
+      }
+    }
+
+    // début du filtrage 
+    auto temp = vector<int>();
+    auto temp_1 = vector<int>();
+    for (int i=k; i<grad_median.rows-k-1;i+=2){
+      for (int j = k; j<grad_median.cols-k;j++){
+        for (int ind_i = -k; ind_i<k+1;ind_i++){
+                for (int ind_j= -k; ind_j<k+1; ind_j++){
+                    temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
+                    temp_1.push_back(grad_median.at<uint8_t>(i+1+ind_i,j+ind_j))
+                }
+            }
+            sort (temp.begin(), temp.end()); // tri du vecteur temp
+            sort (temp_1.begin(), temp_1.end()); // tri du vecteur temp
+            frame1.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()/2];
+            frame1.at<uint8_t>(i-k+1,j-k) = temp_1[(int) temp_1.size()/2];
+            temp.clear();
+            temp_1.clear();
+      }
+    }
   #ifdef PROFILE
   gettimeofday(&end, NULL);
   double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
@@ -205,6 +233,7 @@ int main (int argc, char *argv[]) {
     
 
     // filtre Sobel avec le déroulement de bouble
+    grad = frame_gray.clone();
     for (int i = 1;i<rows-2;i+=2){
       for (int j =1;j<cols-1;j++){
         int x = frame_gray.at<uint8_t>(i-1,j-1)*(-1)+frame_gray.at<uint8_t>(i-1,j)*(-2)+frame_gray.at<uint8_t>(i-1,j+1)*(-1)+frame_gray.at<uint8_t>(i+1,j-1)+frame_gray.at<uint8_t>(i+1,j)*2+frame_gray.at<uint8_t>(i+1,j+1);
