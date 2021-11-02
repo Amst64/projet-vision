@@ -82,8 +82,8 @@ gettimeofday(&start, NULL);
             sort (temp.begin(), temp.end()); // tri du vecteur temp
             sort (temp_1.begin(), temp_1.end()); // tri du vecteur temp
             //cout<<"La valeur de la médiane est "<<temp[(int) temp.size()/2]<<" "<<endl;
-            grad.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()/2];
-            grad.at<uint8_t>(i-k+1,j-k) = temp_1[(int) temp_1.size()/2];
+            grad.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()>>1];
+            grad.at<uint8_t>(i-k+1,j-k) = temp_1[(int) temp_1.size()>>1];
             temp.clear();
             temp_1.clear();
         }
@@ -113,8 +113,8 @@ gettimeofday(&start, NULL);
 //            cout<<(int) grad.at<uint8_t>(i+1,j-1)<<" "<<(int) grad.at<uint8_t>(i+1,j)<<" "<<(int)grad.at<uint8_t>(i+1,j+1)<<endl;
             //cout<<"La valeur de x : "<<x<<"\nLa valeur de y : "<<y<<endl;
             //cout<<"La valeur de Sobel est "<<(x+y)/2<<endl;
-            grad_Sobel.at<uint8_t>(i,j) = (abs(x)+abs(y))/2;
-            grad_Sobel.at<uint8_t>(i+1,j)= (abs(x2)+abs(y2))/2;
+            grad_Sobel.at<uint8_t>(i,j) = (abs(x)+abs(y))>>1;
+            grad_Sobel.at<uint8_t>(i+1,j)= (abs(x2)+abs(y2))>>1;
         }
     }
     
