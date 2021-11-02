@@ -100,6 +100,7 @@ cout<<"Le temps d'exécution du programme opti pour le filtre de median est "<<(
     //cout<<grad<<endl;
     cout<<endl;
     cout<<endl;
+gettimeofday(&start, NULL); 
     for (int i = 1; i<grad.rows-2;i+=2) {
         for (int j = 1; j < grad.cols-1;j+=1){
             int x = grad.at<uint8_t>(i-1,j-1)*(-1)+grad.at<uint8_t>(i-1,j)*(-2)+grad.at<uint8_t>(i-1,j+1)*(-1)+grad.at<uint8_t>(i+1,j-1)+grad.at<uint8_t>(i+1,j)*2+grad.at<uint8_t>(i+1,j+1);
@@ -117,6 +118,10 @@ cout<<"Le temps d'exécution du programme opti pour le filtre de median est "<<(
         }
     }
     
+    gettimeofday(&end, NULL);
+e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
+s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
+cout<<"Le temps d'exécution du programme opti pour le filtre Sobel est "<<(e-s)<<endl;
     namedWindow( "Test affichage", WINDOW_AUTOSIZE );
     imshow("Test affichage", grad_image);
     namedWindow( "Test Sobel", WINDOW_AUTOSIZE );
