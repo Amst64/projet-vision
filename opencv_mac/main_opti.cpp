@@ -19,6 +19,7 @@
 using namespace std;
 using namespace::cv;
 
+
 int main(int argc, const char * argv[]) {
     // entier pour stocker le nombre de lignes et de colonne de la matrice/image
     
@@ -66,28 +67,71 @@ gettimeofday(&start, NULL);
 //    cout<<"\n\n"<<endl;
 //    cout<<grad_median<<endl;
 
-    // on réalise le filtrage (médian)
-    auto temp = vector<int>(); // vecteur qui va stocker les valeurs que l'on obtient avec la matrice nxn de filtrage
-    auto temp_1 = vector<int>(); // vecteur qui va stocker les valeurs que l'on obtient avec la matrice nxn de filtrage
-    cout<<"Debut du filtrage"<<endl;
-    for (int i = k; i<grad_median.rows-k-1;i+=2){
-        for (int j = k; j<grad_median.cols-k; j++){
-            for (int ind_i = -k; ind_i<k+1;ind_i++){
+// CODE DEROULAGE DE BOUCLE 
+    // // on réalise le filtrage (médian)
+    // auto temp = vector<int>(); // vecteur qui va stocker les valeurs que l'on obtient avec la matrice nxn de filtrage
+    // auto temp_1 = vector<int>(); // vecteur qui va stocker les valeurs que l'on obtient avec la matrice nxn de filtrage
+    // cout<<"Debut du filtrage"<<endl;
+    // for (int i = k; i<grad_median.rows-k-1;i+=2){
+    //     for (int j = k; j<grad_median.cols-k; j++){
+    //         for (int ind_i = -k; ind_i<k+1;ind_i++){
+    //             for (int ind_j= -k; ind_j<k+1; ind_j++){
+    //                 temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
+    //                 temp_1.push_back(grad_median.at<uint8_t>(i+1+ind_i,j+ind_j));
+    //                 // mettre les 3 lignes du dessous ici pour ralentir le temps d'exécution du programme ?
+    //             }
+    //         }
+    //         sort (temp.begin(), temp.end()); // tri du vecteur temp
+    //         sort (temp_1.begin(), temp_1.end()); // tri du vecteur temp
+    //         //cout<<"La valeur de la médiane est "<<temp[(int) temp.size()/2]<<" "<<endl;
+    //         grad.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()>>1];
+    //         grad.at<uint8_t>(i-k+1,j-k) = temp_1[(int) temp_1.size()>>1];
+    //         temp.clear();
+    //         temp_1.clear();
+    //     }
+    // }
+
+
+
+// CODE AVEC L'HISTOGRAMME
+auto temp = vector<int>(256);
+int median = 0;
+int pos = 0;
+int mid = (n*n)/2; 
+for (int i = k; i<grad_median.rows-k;i++){
+    for (int j = k; j<grad_median.cols-k; j++){
+        if (j==k){
+            for (int ind_i = -k; ind_i<k+1; ind_i++){
                 for (int ind_j= -k; ind_j<k+1; ind_j++){
-                    temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
-                    temp_1.push_back(grad_median.at<uint8_t>(i+1+ind_i,j+ind_j));
-                    // mettre les 3 lignes du dessous ici pour ralentir le temps d'exécution du programme ?
+                    temp[(int) grad_median.at<uint8_t>(i+ind_i,j+ind_j)]++;
                 }
             }
-            sort (temp.begin(), temp.end()); // tri du vecteur temp
-            sort (temp_1.begin(), temp_1.end()); // tri du vecteur temp
-            //cout<<"La valeur de la médiane est "<<temp[(int) temp.size()/2]<<" "<<endl;
-            grad.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()>>1];
-            grad.at<uint8_t>(i-k+1,j-k) = temp_1[(int) temp_1.size()>>1];
-            temp.clear();
-            temp_1.clear();
         }
+        else {
+            for (int ind_i = -k; ind_i<k+1; ind_i++){
+                temp[(int) grad_median.at<uint8_t>(i+ind_i,j+k)]++;
+                temp[(int) grad_median.at<uint8_t>(i+ind_i,j-1-k)]--;
+            }
+        }
+        // on détermine la valeur du médian 
+        while(median < mid){
+            median+=temp[pos];
+            //cout<<temp[pos]<<endl;
+            pos++;
+        }
+
+        
+        grad.at<uint8_t>(i-k,j-k) = pos;
+        pos =0; 
+        median =0;
+
     }
+    //display(temp);
+    temp.clear();
+    temp.resize(256);
+}
+
+
 gettimeofday(&end, NULL);
 double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
 double s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
@@ -119,9 +163,9 @@ gettimeofday(&start, NULL);
     }
     
     gettimeofday(&end, NULL);
-e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
-s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
-cout<<"Le temps d'exécution du programme opti pour le filtre Sobel est "<<(e-s)<<endl;
+    e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
+    s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
+    cout<<"Le temps d'exécution du programme opti pour le filtre Sobel est "<<(e-s)<<endl;
     namedWindow( "Test affichage", WINDOW_AUTOSIZE );
     imshow("Test affichage", grad_image);
     namedWindow( "Test Sobel", WINDOW_AUTOSIZE );
