@@ -57,7 +57,7 @@ int main(int argc, const char * argv[]) {
   gettimeofday(&end, NULL);
   double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
   double s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
-  cout<<"Le temps d'exécution du programme naif pour le filtre de median est "<<(e-s)<<endl;
+  cout<<"Le temps d'exécution du programme naif pour le filtre de median est "<<(e-s)<<" ms"<<endl;
     
     
     // PARTIE FILTRE DE SOBEL
@@ -78,7 +78,7 @@ int main(int argc, const char * argv[]) {
   gettimeofday(&end, NULL);
   e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
   s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
-  cout<<"Le temps d'exécution du programme naif pour le filtre de Sobel est "<<(e-s)<<endl;
+  cout<<"Le temps d'exécution du programme naif pour le filtre de Sobel est "<<(e-s)<<" ms"<<endl;
   
     namedWindow( "Test affichage", WINDOW_AUTOSIZE );
     imshow("Test affichage", frame);
