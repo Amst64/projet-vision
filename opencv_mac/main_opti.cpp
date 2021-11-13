@@ -135,7 +135,7 @@ for (int i = k; i<grad_median.rows-k;i++){
 gettimeofday(&end, NULL);
 double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
 double s = ((double) start.tv_sec * 1000.0 + (double) start.tv_usec*0.001);
-cout<<"Le temps d'exécution du programme opti pour le filtre de median est "<<(e-s)<<" ms"<<endl;
+cout<<"Le temps d'exécution du programme opti pour le filtre Médian est "<<(e-s)<<" ms"<<endl;
     
     // PARTIE FILTRE DE SOBEL
 
@@ -143,18 +143,18 @@ cout<<"Le temps d'exécution du programme opti pour le filtre de median est "<<(
 gettimeofday(&start, NULL); 
     for (int i = 1; i<grad.rows-2;i+=2) {
         for (int j = 1; j < grad.cols-1;j+=1){
-            int x = grad.at<uint8_t>(i-1,j-1)*(-1)+grad.at<uint8_t>(i-1,j)*(-2)+grad.at<uint8_t>(i-1,j+1)*(-1)+grad.at<uint8_t>(i+1,j-1)+grad.at<uint8_t>(i+1,j)*2+grad.at<uint8_t>(i+1,j+1);
-            int y = grad.at<uint8_t>(i-1,j-1)+grad.at<uint8_t>(i-1,j+1)*(-1)+grad.at<uint8_t>(i,j-1)*2+grad.at<uint8_t>(i,j+1)*(-2)+grad.at<uint8_t>(i+1,j-1)+grad.at<uint8_t>(i+1,j+1)*(-1);
+            // int x = grad.at<uint8_t>(i-1,j-1)*(-1)+grad.at<uint8_t>(i-1,j)*(-2)+grad.at<uint8_t>(i-1,j+1)*(-1)+grad.at<uint8_t>(i+1,j-1)+grad.at<uint8_t>(i+1,j)*2+grad.at<uint8_t>(i+1,j+1);
+            // int y = grad.at<uint8_t>(i-1,j-1)+grad.at<uint8_t>(i-1,j+1)*(-1)+grad.at<uint8_t>(i,j-1)*2+grad.at<uint8_t>(i,j+1)*(-2)+grad.at<uint8_t>(i+1,j-1)+grad.at<uint8_t>(i+1,j+1)*(-1);
 			
-			int x2 = grad.at<uint8_t>(i,j-1)*(-1)+grad.at<uint8_t>(i,j)*(-2)+grad.at<uint8_t>(i,j+1)*(-1)+grad.at<uint8_t>(i+2,j-1)+grad.at<uint8_t>(i+2,j)*2+grad.at<uint8_t>(i+2,j+1);
-            int y2 = grad.at<uint8_t>(i,j-1)+grad.at<uint8_t>(i,j+1)*(-1)+grad.at<uint8_t>(i+1,j-1)*2+grad.at<uint8_t>(i+1,j+1)*(-2)+grad.at<uint8_t>(i+2,j-1)+grad.at<uint8_t>(i+2,j+1)*(-1);
+			// int x2 = grad.at<uint8_t>(i,j-1)*(-1)+grad.at<uint8_t>(i,j)*(-2)+grad.at<uint8_t>(i,j+1)*(-1)+grad.at<uint8_t>(i+2,j-1)+grad.at<uint8_t>(i+2,j)*2+grad.at<uint8_t>(i+2,j+1);
+            // int y2 = grad.at<uint8_t>(i,j-1)+grad.at<uint8_t>(i,j+1)*(-1)+grad.at<uint8_t>(i+1,j-1)*2+grad.at<uint8_t>(i+1,j+1)*(-2)+grad.at<uint8_t>(i+2,j-1)+grad.at<uint8_t>(i+2,j+1)*(-1);
 //            cout<<(int)grad.at<uint8_t>(i-1,j-1)<<" "<<(int) grad.at<uint8_t>(i-1,j)<<" "<<(int)grad.at<uint8_t>(i-1,j+1)<<endl;
 //            cout<<(int) grad.at<uint8_t>(i,j-1)<<" "<<(int) grad.at<uint8_t>(i,j)<<" "<<(int)grad.at<uint8_t>(i,j+1)<<endl;
 //            cout<<(int) grad.at<uint8_t>(i+1,j-1)<<" "<<(int) grad.at<uint8_t>(i+1,j)<<" "<<(int)grad.at<uint8_t>(i+1,j+1)<<endl;
             //cout<<"La valeur de x : "<<x<<"\nLa valeur de y : "<<y<<endl;
             //cout<<"La valeur de Sobel est "<<(x+y)/2<<endl;
-            grad_Sobel.at<uint8_t>(i,j) = (abs(x)+abs(y))>>1;
-            grad_Sobel.at<uint8_t>(i+1,j)= (abs(x2)+abs(y2))>>1;
+            grad_Sobel.at<uint8_t>(i,j) = (abs(grad.at<uint8_t>(i-1,j-1)*(-1)+grad.at<uint8_t>(i-1,j)*(-2)+grad.at<uint8_t>(i-1,j+1)*(-1)+grad.at<uint8_t>(i+1,j-1)+grad.at<uint8_t>(i+1,j)*2+grad.at<uint8_t>(i+1,j+1))+abs(grad.at<uint8_t>(i-1,j-1)+grad.at<uint8_t>(i-1,j+1)*(-1)+grad.at<uint8_t>(i,j-1)*2+grad.at<uint8_t>(i,j+1)*(-2)+grad.at<uint8_t>(i+1,j-1)+grad.at<uint8_t>(i+1,j+1)*(-1)))>>1;
+            grad_Sobel.at<uint8_t>(i+1,j)= (abs(grad.at<uint8_t>(i,j-1)*(-1)+grad.at<uint8_t>(i,j)*(-2)+grad.at<uint8_t>(i,j+1)*(-1)+grad.at<uint8_t>(i+2,j-1)+grad.at<uint8_t>(i+2,j)*2+grad.at<uint8_t>(i+2,j+1))+abs(grad.at<uint8_t>(i,j-1)+grad.at<uint8_t>(i,j+1)*(-1)+grad.at<uint8_t>(i+1,j-1)*2+grad.at<uint8_t>(i+1,j+1)*(-2)+grad.at<uint8_t>(i+2,j-1)+grad.at<uint8_t>(i+2,j+1)*(-1)))>>1;
         }
     }
     
