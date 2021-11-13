@@ -10,3 +10,6 @@ test.sh
 opencv2/
 opencv_mac/projet*
 filtre_median_amine.jpg
+opencv_mac/histo
+opencv_mac/histogramme.cpp 
+
