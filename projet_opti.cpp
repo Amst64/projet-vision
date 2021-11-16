@@ -290,7 +290,7 @@ for (int i =k; i<grad_median.rows-k;i++){
                 
 
             
-                grad.at<uint8_t>(i-k,grad_median.cols-k-1-k) = pos;
+                frame1.at<uint8_t>(i-k,grad_median.cols-k-1-k) = pos;
                 pos =0; 
                 median =0;
         }
@@ -325,7 +325,7 @@ for (int i =k; i<grad_median.rows-k;i++){
                 
 
             
-                grad.at<uint8_t>(i-k,k-k) = pos;
+                frame1.at<uint8_t>(i-k,k-k) = pos;
                 pos =0; 
                 median =0;
         }
@@ -384,7 +384,7 @@ for (int i =k; i<grad_median.rows-k;i++){
                 
 
             
-                grad.at<uint8_t>(i-k,k-k) = pos;
+                frame1.at<uint8_t>(i-k,k-k) = pos;
                 pos =0; 
                 median =0;
         }
