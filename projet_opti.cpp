@@ -185,24 +185,46 @@ int main (int argc, char *argv[]) {
     }
 
     // début du filtrage 
-    auto temp = vector<int>();
-    auto temp_1 = vector<int>();
-    for (int i=k; i<grad_median.rows-k-1;i+=2){
-      for (int j = k; j<grad_median.cols-k;j++){
-        for (int ind_i = -k; ind_i<k+1;ind_i++){
+    
+auto temp = vector<int>(256);
+int median = 0;
+int pos = 0;
+int mid = (n*n)/2; 
+
+// PARTIE FILTRE MEDIAN AVEC LA MOITIE DE L'HISTOGRAMME 
+for (int i = k; i<grad_median.rows-k;i++){
+    for (int j = k; j<grad_median.cols-k; j++){
+        if (j==k){
+            for (int ind_i = -k; ind_i<k+1; ind_i++){
                 for (int ind_j= -k; ind_j<k+1; ind_j++){
-                    temp.push_back(grad_median.at<uint8_t>(i+ind_i,j+ind_j));
-                    temp_1.push_back(grad_median.at<uint8_t>(i+1+ind_i,j+ind_j))
+                    temp[(int) grad_median.at<uint8_t>(i+ind_i,j+ind_j)]++;
                 }
             }
-            sort (temp.begin(), temp.end()); // tri du vecteur temp
-            sort (temp_1.begin(), temp_1.end()); // tri du vecteur temp
-            frame1.at<uint8_t>(i-k,j-k) = temp[(int) temp.size()/2];
-            frame1.at<uint8_t>(i-k+1,j-k) = temp_1[(int) temp_1.size()/2];
-            temp.clear();
-            temp_1.clear();
-      }
+        }
+        else {
+            // suppression de la colonne + ajout de la colonne (se trouvant à la distance k de pixel (i,j))
+            for (int ind_i = -k; ind_i<k+1; ind_i++){
+                temp[(int) grad_median.at<uint8_t>(i+ind_i,j+k)]++;
+                temp[(int) grad_median.at<uint8_t>(i+ind_i,j-1-k)]--;
+            }
+        }
+        // on détermine la valeur du médian 
+        while(median < mid){
+            median+=temp[pos];
+            //cout<<temp[pos]<<endl;
+            pos++;
+        }
+
+        
+        frame1.at<uint8_t>(i-k,j-k) = pos;
+        pos =0; 
+        median =0;
+
     }
+    //display(temp);
+    temp.clear();
+    temp.resize(256);
+}
   #ifdef PROFILE
   gettimeofday(&end, NULL);
   double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
