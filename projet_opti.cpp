@@ -423,10 +423,10 @@ for (int i =k; i<grad_median.rows-k;i++){
     grad = frame1.clone();
     for (int j =1;j<cols-1;j++){
       for (int i = 1;i<rows-2;i+=2){
-        int x = frame_gray.at<uint8_t>(i-1,j-1)*(-1)+frame_gray.at<uint8_t>(i-1,j)*(-2)+frame_gray.at<uint8_t>(i-1,j+1)*(-1)+frame_gray.at<uint8_t>(i+1,j-1)+frame_gray.at<uint8_t>(i+1,j)*2+frame_gray.at<uint8_t>(i+1,j+1);
-        int y = frame_gray.at<uint8_t>(i-1,j-1)+frame_gray.at<uint8_t>(i-1,j+1)*(-1)+frame_gray.at<uint8_t>(i,j-1)*2+frame_gray.at<uint8_t>(i,j+1)*(-2)+frame_gray.at<uint8_t>(i+1,j-1)+frame_gray.at<uint8_t>(i+1,j+1)*(-1);
-			  int x2 = frame_gray.at<uint8_t>(i,j-1)*(-1)+frame_gray.at<uint8_t>(i,j)*(-2)+frame_gray.at<uint8_t>(i,j+1)*(-1)+frame_gray.at<uint8_t>(i+2,j-1)+frame_gray.at<uint8_t>(i+2,j)*2+frame_gray.at<uint8_t>(i+2,j+1);
-        int y2 = frame_gray.at<uint8_t>(i,j-1)+frame_gray.at<uint8_t>(i,j+1)*(-1)+frame_gray.at<uint8_t>(i+1,j-1)*2+frame_gray.at<uint8_t>(i+1,j+1)*(-2)+frame_gray.at<uint8_t>(i+2,j-1)+frame_gray.at<uint8_t>(i+2,j+1)*(-1);
+        int x = frame1.at<uint8_t>(i-1,j-1)*(-1)+frame1.at<uint8_t>(i-1,j)*(-2)+frame1.at<uint8_t>(i-1,j+1)*(-1)+frame1.at<uint8_t>(i+1,j-1)+frame1.at<uint8_t>(i+1,j)*2+frame1.at<uint8_t>(i+1,j+1);
+        int y = frame1.at<uint8_t>(i-1,j-1)+frame1.at<uint8_t>(i-1,j+1)*(-1)+frame1.at<uint8_t>(i,j-1)*2+frame1.at<uint8_t>(i,j+1)*(-2)+frame1.at<uint8_t>(i+1,j-1)+frame1.at<uint8_t>(i+1,j+1)*(-1);
+			  int x2 = frame1.at<uint8_t>(i,j-1)*(-1)+frame1.at<uint8_t>(i,j)*(-2)+frame1.at<uint8_t>(i,j+1)*(-1)+frame1.at<uint8_t>(i+2,j-1)+frame1.at<uint8_t>(i+2,j)*2+frame1.at<uint8_t>(i+2,j+1);
+        int y2 = frame1.at<uint8_t>(i,j-1)+frame1.at<uint8_t>(i,j+1)*(-1)+frame1.at<uint8_t>(i+1,j-1)*2+frame1.at<uint8_t>(i+1,j+1)*(-2)+frame1.at<uint8_t>(i+2,j-1)+frame1.at<uint8_t>(i+2,j+1)*(-1);
 
         grad.at<uint8_t>(i,j) = (abs(x)+abs(y))/2;
         grad.at<uint8_t>(i+1,j)= (abs(x2)+abs(y2))/2;
