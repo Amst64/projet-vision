@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
     // entier pour stocker le nombre de lignes et de colonne de la matrice/image
     
     // n = taille du kernel (matrice qu'on va utiliser pour réaliser le filtre médian)
-    int n = 17;
+    int n = 9;
     int k = ((n-3)/2)+1;
     // vecteur contenant les valeurs sur lesquelles on va appliquer les filtres
     auto conteneur = vector<int> {4,3,2,1,3,2,1,4,5,1,6,2,2,3,5,6};
@@ -99,203 +99,203 @@ int median = 0;
 int pos = 0;
 int mid = (n*n)/2; 
 
-// // PARTIE FILTRE MEDIAN AVEC LA MOITIE DE L'HISTOGRAMME 
-// for (int i = k; i<grad_median.rows-k;i++){
-//     for (int j = k; j<grad_median.cols-k; j++){
-//         if (j==k){
-//             for (int ind_i = -k; ind_i<k+1; ind_i++){
-//                 for (int ind_j= -k; ind_j<k+1; ind_j++){
-//                     temp[(int) grad_median.at<uint8_t>(i+ind_i,j+ind_j)]++;
-//                 }
-//             }
-//         }
-//         else {
-//             // suppression de la colonne + ajout de la colonne (se trouvant à la distance k de pixel (i,j))
-//             for (int ind_i = -k; ind_i<k+1; ind_i++){
-//                 temp[(int) grad_median.at<uint8_t>(i+ind_i,j+k)]++;
-//                 temp[(int) grad_median.at<uint8_t>(i+ind_i,j-1-k)]--;
-//             }
-//         }
-//         // on détermine la valeur du médian 
-        // while(median < mid){
-        //     median+=temp[pos];
-        //     //cout<<temp[pos]<<endl;
-        //     pos++;
-        // }
+// PARTIE FILTRE MEDIAN AVEC LA MOITIE DE L'HISTOGRAMME 
+for (int i = k; i<grad_median.rows-k;i++){
+    for (int j = k; j<grad_median.cols-k; j++){
+        if (j==k){
+            for (int ind_i = -k; ind_i<k+1; ind_i++){
+                for (int ind_j= -k; ind_j<k+1; ind_j++){
+                    temp[(int) grad_median.at<uint8_t>(i+ind_i,j+ind_j)]++;
+                }
+            }
+        }
+        else {
+            // suppression de la colonne + ajout de la colonne (se trouvant à la distance k de pixel (i,j))
+            for (int ind_i = -k; ind_i<k+1; ind_i++){
+                temp[(int) grad_median.at<uint8_t>(i+ind_i,j+k)]++;
+                temp[(int) grad_median.at<uint8_t>(i+ind_i,j-1-k)]--;
+            }
+        }
+        // on détermine la valeur du médian 
+        while(median < mid){
+            median+=temp[pos];
+            //cout<<temp[pos]<<endl;
+            pos++;
+        }
 
         
-        // grad.at<uint8_t>(i-k,j-k) = pos;
-        // pos =0; 
-        // median =0;
+        grad.at<uint8_t>(i-k,j-k) = pos;
+        pos =0; 
+        median =0;
 
-//     }
-//     //display(temp);
-//     temp.clear();
-//     temp.resize(256);
-// }
+    }
+    //display(temp);
+    temp.clear();
+    temp.resize(256);
+}
 
 // PARTIE FILTRE MEDIAN AVEC L'HISTOGRAMME COMPLET
-for (int i =k; i<grad_median.rows-k;i++){
-    if (i == k ){
-        for (int j = k; j<grad_median.cols-k; j++){
-            if (j==k){
-                for (int ind_i = -k; ind_i<k+1; ind_i++){
-                    for (int ind_j = -k; ind_j<k+1;ind_j++){
-                        temp[(int)grad_median.at<uint8_t>(i+ind_i,j+ind_j)]++;
-                    }
-                }
-            }
-            else {
-                for (int ind_i = -k; ind_i<k+1; ind_i++){
-                    temp[(int) grad_median.at<uint8_t>(i+ind_i,j+k)]++;
-                    temp[(int) grad_median.at<uint8_t>(i+ind_i,j-1-k)]--;
-                }
-            }
-            while(median < mid){
-                median+=temp[pos];
-                //cout<<temp[pos]<<endl;
-                pos++;
-            }
-            grad.at<uint8_t>(i-k,j-k) = pos;
-            pos =0; 
-            median =0;
-        }
-    }
+// for (int i =k; i<grad_median.rows-k;i++){
+//     if (i == k ){
+//         for (int j = k; j<grad_median.cols-k; j++){
+//             if (j==k){
+//                 for (int ind_i = -k; ind_i<k+1; ind_i++){
+//                     for (int ind_j = -k; ind_j<k+1;ind_j++){
+//                         temp[(int)grad_median.at<uint8_t>(i+ind_i,j+ind_j)]++;
+//                     }
+//                 }
+//             }
+//             else {
+//                 for (int ind_i = -k; ind_i<k+1; ind_i++){
+//                     temp[(int) grad_median.at<uint8_t>(i+ind_i,j+k)]++;
+//                     temp[(int) grad_median.at<uint8_t>(i+ind_i,j-1-k)]--;
+//                 }
+//             }
+//             while(median < mid){
+//                 median+=temp[pos];
+//                 //cout<<temp[pos]<<endl;
+//                 pos++;
+//             }
+//             grad.at<uint8_t>(i-k,j-k) = pos;
+//             pos =0; 
+//             median =0;
+//         }
+//     }
 
-    else if (k%2==0){
-        if (i%2==0){
-            for (int j = grad_median.cols-k-2;j>=k;j--){
-                for (int ind_i = -k; ind_i<k+1; ind_i++){
-                    temp[(int)grad_median.at<uint8_t>(i+ind_i,j+k+1)]--; 
-                    temp[(int)grad_median.at<uint8_t>(i+ind_i,j-k)]++;
-                }
-                while(median < mid){
-                    median+=temp[pos];
-                    //cout<<temp[pos]<<endl;
-                    pos++;
-                }
+//     else if (k%2==0){
+//         if (i%2==0){
+//             for (int j = grad_median.cols-k-2;j>=k;j--){
+//                 for (int ind_i = -k; ind_i<k+1; ind_i++){
+//                     temp[(int)grad_median.at<uint8_t>(i+ind_i,j+k+1)]--; 
+//                     temp[(int)grad_median.at<uint8_t>(i+ind_i,j-k)]++;
+//                 }
+//                 while(median < mid){
+//                     median+=temp[pos];
+//                     //cout<<temp[pos]<<endl;
+//                     pos++;
+//                 }
                 
 
             
-                grad.at<uint8_t>(i-k,j-k) = pos;
-                pos =0; 
-                median =0;
-            }
+//                 grad.at<uint8_t>(i-k,j-k) = pos;
+//                 pos =0; 
+//                 median =0;
+//             }
 
 
-            // travaille sur les valeurs qu'on skip dans la boucle 
-             for (int ind_j = -k;ind_j<k+1;ind_j++){
-                temp[(int)grad_median.at<uint8_t>(i-k-1,grad_median.cols-k-1+ind_j)]--;
-                temp[(int)grad_median.at<uint8_t>(i+k,grad_median.cols-k-1+ind_j)]++;
-            }
-            while(median < mid){
-                    median+=temp[pos];
-                    //cout<<temp[pos]<<endl;
-                    pos++;
-                }
+//             // travaille sur les valeurs qu'on skip dans la boucle 
+//              for (int ind_j = -k;ind_j<k+1;ind_j++){
+//                 temp[(int)grad_median.at<uint8_t>(i-k-1,grad_median.cols-k-1+ind_j)]--;
+//                 temp[(int)grad_median.at<uint8_t>(i+k,grad_median.cols-k-1+ind_j)]++;
+//             }
+//             while(median < mid){
+//                     median+=temp[pos];
+//                     //cout<<temp[pos]<<endl;
+//                     pos++;
+//                 }
                 
 
             
-                grad.at<uint8_t>(i-k,grad_median.cols-k-1-k) = pos;
-                pos =0; 
-                median =0;
-        }
-        else if (i%2!=0){
-            for (int j = k+1; j<grad_median.cols-k;j++){
-                for (int ind_i = -k; ind_i<k+1; ind_i++){
-                    temp[(int)grad_median.at<uint8_t>(i+ind_i,j-k-1)]--;
-                    temp[((int)grad_median.at<uint8_t>(i+ind_i,j+k))]++;
-                }
-                while(median < mid){
-                    median+=temp[pos];
-                    //cout<<temp[pos]<<endl;
-                    pos++;
-                }
+//                 grad.at<uint8_t>(i-k,grad_median.cols-k-1-k) = pos;
+//                 pos =0; 
+//                 median =0;
+//         }
+//         else if (i%2!=0){
+//             for (int j = k+1; j<grad_median.cols-k;j++){
+//                 for (int ind_i = -k; ind_i<k+1; ind_i++){
+//                     temp[(int)grad_median.at<uint8_t>(i+ind_i,j-k-1)]--;
+//                     temp[((int)grad_median.at<uint8_t>(i+ind_i,j+k))]++;
+//                 }
+//                 while(median < mid){
+//                     median+=temp[pos];
+//                     //cout<<temp[pos]<<endl;
+//                     pos++;
+//                 }
                 
 
             
-                grad.at<uint8_t>(i-k,j-k) = pos;
-                pos =0; 
-                median =0;
-            }
+//                 grad.at<uint8_t>(i-k,j-k) = pos;
+//                 pos =0; 
+//                 median =0;
+//             }
 
-            for (int ind_j = -k; ind_j<k+1; ind_j++){
-                temp[(int)grad_median.at<uint8_t>(i-k-1,k+ind_j)]--;
-                temp[(int)grad_median.at<uint8_t>(i+k,k+ind_j)]++;
-            }
-            while(median < mid){
-                    median+=temp[pos];
-                    //cout<<temp[pos]<<endl;
-                    pos++;
-                }
+//             for (int ind_j = -k; ind_j<k+1; ind_j++){
+//                 temp[(int)grad_median.at<uint8_t>(i-k-1,k+ind_j)]--;
+//                 temp[(int)grad_median.at<uint8_t>(i+k,k+ind_j)]++;
+//             }
+//             while(median < mid){
+//                     median+=temp[pos];
+//                     //cout<<temp[pos]<<endl;
+//                     pos++;
+//                 }
                 
 
             
-                grad.at<uint8_t>(i-k,k-k) = pos;
-                pos =0; 
-                median =0;
-        }
-    }
+//                 grad.at<uint8_t>(i-k,k-k) = pos;
+//                 pos =0; 
+//                 median =0;
+//         }
+//     }
 
-    else{
-        if (i%2==0){
-            for (int j = grad_median.cols-k-2;j>=k;j--){
-                for (int ind_i = -k; ind_i<k+1; ind_i++){
-                    temp[(int)grad_median.at<uint8_t>(i+ind_i,j+k+1)]--;
-                    temp[(int)grad_median.at<uint8_t>(i+ind_i,j-k)]++;
-                }
-                while(median < mid){
-                    median+=temp[pos];
-                    //cout<<temp[pos]<<endl;
-                    pos++;
-                }
+//     else{
+//         if (i%2==0){
+//             for (int j = grad_median.cols-k-2;j>=k;j--){
+//                 for (int ind_i = -k; ind_i<k+1; ind_i++){
+//                     temp[(int)grad_median.at<uint8_t>(i+ind_i,j+k+1)]--;
+//                     temp[(int)grad_median.at<uint8_t>(i+ind_i,j-k)]++;
+//                 }
+//                 while(median < mid){
+//                     median+=temp[pos];
+//                     //cout<<temp[pos]<<endl;
+//                     pos++;
+//                 }
                 
 
             
-                grad.at<uint8_t>(i-k,j-k) = pos;
-                pos =0; 
-                median =0;
-            }
+//                 grad.at<uint8_t>(i-k,j-k) = pos;
+//                 pos =0; 
+//                 median =0;
+//             }
 
-        }
+//         }
 
-        else if (i%2!=0){
-            for (int j = k+1; j<grad_median.cols-k; j++){
-                for (int ind_i = -k; ind_i<k+1; ind_i++){
-                    temp[(int)grad_median.at<uint8_t>(i+ind_i,j-k-1)]--; 
-                    temp[(int)grad_median.at<uint8_t>(i+ind_i,j+k)]++;
-                }
-                while(median < mid){
-                    median+=temp[pos];
-                    //cout<<temp[pos]<<endl;
-                    pos++;
-                }
+//         else if (i%2!=0){
+//             for (int j = k+1; j<grad_median.cols-k; j++){
+//                 for (int ind_i = -k; ind_i<k+1; ind_i++){
+//                     temp[(int)grad_median.at<uint8_t>(i+ind_i,j-k-1)]--; 
+//                     temp[(int)grad_median.at<uint8_t>(i+ind_i,j+k)]++;
+//                 }
+//                 while(median < mid){
+//                     median+=temp[pos];
+//                     //cout<<temp[pos]<<endl;
+//                     pos++;
+//                 }
                 
 
             
-                grad.at<uint8_t>(i-k,j-k) = pos;
-                pos =0; 
-                median =0;
-            }
+//                 grad.at<uint8_t>(i-k,j-k) = pos;
+//                 pos =0; 
+//                 median =0;
+//             }
 
-            for (int ind_j = -k; ind_j<k+1; ind_j++){
-                temp[(int)grad_median.at<uint8_t>(i-k-1,k+ind_j)]--;
-                temp[(int)grad_median.at<uint8_t>(i+k,k+ind_j)]++;
-            }
-            while(median < mid){
-                    median+=temp[pos];
-                    //cout<<temp[pos]<<endl;
-                    pos++;
-                }
+//             for (int ind_j = -k; ind_j<k+1; ind_j++){
+//                 temp[(int)grad_median.at<uint8_t>(i-k-1,k+ind_j)]--;
+//                 temp[(int)grad_median.at<uint8_t>(i+k,k+ind_j)]++;
+//             }
+//             while(median < mid){
+//                     median+=temp[pos];
+//                     //cout<<temp[pos]<<endl;
+//                     pos++;
+//                 }
                 
 
             
-                grad.at<uint8_t>(i-k,k-k) = pos;
-                pos =0; 
-                median =0;
-        }
-    }
-}
+//                 grad.at<uint8_t>(i-k,k-k) = pos;
+//                 pos =0; 
+//                 median =0;
+//         }
+//     }
+// }
 
 gettimeofday(&end, NULL);
 double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);

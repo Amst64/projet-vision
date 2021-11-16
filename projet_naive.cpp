@@ -224,12 +224,12 @@ int main (int argc, char *argv[]) {
     //   addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, grad ); 	
     
 
-  grad = frame_gray.clone();
+  grad = frame1.clone();
     // FILTRE DE SOBEL
     for (int i = 1; i<frame_gray.rows-1;i++){
         for (int j = 1; j < frame_gray.cols-1;j++){
-            int x = frame_gray.at<uint8_t>(i-1,j-1)+frame_gray.at<uint8_t>(i-1,j)*2+frame_gray.at<uint8_t>(i-1,j+1)+frame_gray.at<uint8_t>(i+1,j-1)*(-1)+frame_gray.at<uint8_t>(i+1,j)*(-2)+frame_gray.at<uint8_t>(i+1,j+1)*(-1);
-            int y = frame_gray.at<uint8_t>(i-1,j-1)*(-1)+frame_gray.at<uint8_t>(i-1,j+1)+frame_gray.at<uint8_t>(i,j-1)*(-2)+frame_gray.at<uint8_t>(i,j+1)*2+frame_gray.at<uint8_t>(i+1,j-1)*(-1)+frame_gray.at<uint8_t>(i+1,j+1);
+            int x = frame1.at<uint8_t>(i-1,j-1)+frame1.at<uint8_t>(i-1,j)*2+frame1.at<uint8_t>(i-1,j+1)+frame1.at<uint8_t>(i+1,j-1)*(-1)+frame1.at<uint8_t>(i+1,j)*(-2)+frame1.at<uint8_t>(i+1,j+1)*(-1);
+            int y = frame1.at<uint8_t>(i-1,j-1)*(-1)+frame1.at<uint8_t>(i-1,j+1)+frame1.at<uint8_t>(i,j-1)*(-2)+frame1.at<uint8_t>(i,j+1)*2+frame1.at<uint8_t>(i+1,j-1)*(-1)+frame1.at<uint8_t>(i+1,j+1);
             if (x<0){
                 x = -x;
             }
