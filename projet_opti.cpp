@@ -389,7 +389,7 @@ for (int i = k; i<grad_median.rows-k;i++){
 //                 median =0;
 //         }
 //     }
-}
+//}
   #ifdef PROFILE
   gettimeofday(&end, NULL);
   double e = ((double) end.tv_sec * 1000.0 + (double) end.tv_usec*0.001);
