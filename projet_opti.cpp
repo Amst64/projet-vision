@@ -110,7 +110,7 @@ int main (int argc, char *argv[]) {
 // Déclaration des variables - imagesize
 // Mat - structure contenant l'image 2D niveau de gris
 // Mat3b - structure contenant l'image 2D en couleur (trois cannaux)
-//
+  int k = ((n-3)/2)+1;
   Mat3b frame; // couleur
   Mat frame1; // niveau de gris 
   Mat frame_gray; // niveau de gris 
