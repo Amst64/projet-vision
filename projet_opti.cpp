@@ -186,10 +186,12 @@ int main (int argc, char *argv[]) {
 
     // début du filtrage 
     
-// auto temp = vector<int>(256);
-// int median = 0;
-// int pos = 0;
-// int mid = (n*n)/2; 
+
+
+auto temp = vector<int>(256);
+int median = 0;
+int pos = 0;
+int mid = (n*n)/2; 
 
 // // PARTIE FILTRE MEDIAN AVEC LA MOITIE DE L'HISTOGRAMME 
 // for (int i = k; i<grad_median.rows-k;i++){
