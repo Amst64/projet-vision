@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
     // entier pour stocker le nombre de lignes et de colonne de la matrice/image
     
     // n = taille du kernel (matrice qu'on va utiliser pour réaliser le filtre médian)
-    int n = 9;
+    int n = 3;
     int k = ((n-3)/2)+1;
     // vecteur contenant les valeurs sur lesquelles on va appliquer les filtres
     auto conteneur = vector<int> {4,3,2,1,3,2,1,4,5,1,6,2,2,3,5,6};
@@ -134,7 +134,7 @@ for (int i = k; i<grad_median.rows-k;i++){
     temp.resize(256);
 }
 
-// PARTIE FILTRE MEDIAN AVEC L'HISTOGRAMME COMPLET
+// //PARTIE FILTRE MEDIAN AVEC L'HISTOGRAMME COMPLET
 // for (int i =k; i<grad_median.rows-k;i++){
 //     if (i == k ){
 //         for (int j = k; j<grad_median.cols-k; j++){
@@ -163,6 +163,7 @@ for (int i = k; i<grad_median.rows-k;i++){
 //     }
 
 //     else if (k%2==0){
+
 //         if (i%2==0){
 //             for (int j = grad_median.cols-k-2;j>=k;j--){
 //                 for (int ind_i = -k; ind_i<k+1; ind_i++){
@@ -238,7 +239,8 @@ for (int i = k; i<grad_median.rows-k;i++){
 //     }
 
 //     else{
-//         if (i%2==0){
+//         cout<<"On est dans l'autre cas"<<endl;
+//         if (i%2!=0){
 //             for (int j = grad_median.cols-k-2;j>=k;j--){
 //                 for (int ind_i = -k; ind_i<k+1; ind_i++){
 //                     temp[(int)grad_median.at<uint8_t>(i+ind_i,j+k+1)]--;
@@ -259,7 +261,7 @@ for (int i = k; i<grad_median.rows-k;i++){
 
 //         }
 
-//         else if (i%2!=0){
+//         else if (i%2==0){
 //             for (int j = k+1; j<grad_median.cols-k; j++){
 //                 for (int ind_i = -k; ind_i<k+1; ind_i++){
 //                     temp[(int)grad_median.at<uint8_t>(i+ind_i,j-k-1)]--; 
