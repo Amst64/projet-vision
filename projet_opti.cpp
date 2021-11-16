@@ -420,7 +420,7 @@ for (int i =k; i<grad_median.rows-k;i++){
     
 
     // filtre Sobel avec le déroulement de bouble
-    grad = frame_gray.clone();
+    grad = frame1.clone();
     for (int j =1;j<cols-1;j++){
       for (int i = 1;i<rows-2;i+=2){
         int x = frame_gray.at<uint8_t>(i-1,j-1)*(-1)+frame_gray.at<uint8_t>(i-1,j)*(-2)+frame_gray.at<uint8_t>(i-1,j+1)*(-1)+frame_gray.at<uint8_t>(i+1,j-1)+frame_gray.at<uint8_t>(i+1,j)*2+frame_gray.at<uint8_t>(i+1,j+1);
