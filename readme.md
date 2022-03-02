@@ -1,5 +1,8 @@
 # Projet Vision
 
+Projet réaliser avec [Askar SEYADOUMOUGAMMADOU](https://github.com/Amst64).  
+  
+
 Dans ce projet, on cherche à  implémenter un algorithme de vision sur une carte SABRE équipé d’un processeur RISC.  
 L’algorithme de vision doit réaliser 2 filtrages sur une image. Les filtres sont le filtre de Sobel et le filtre Médian. Le filtre de Sobel a pour but de détecter les contours sur des images, quant au filtre Médian il est utilisé pour réduire les bruits parasites (salt et pepper) que l’on trouve sur les images.  
 
